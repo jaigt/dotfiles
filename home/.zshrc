@@ -125,6 +125,13 @@ gdiff() {
 eval "$(starship init zsh)"
 
 alias update="brew update && brew upgrade && brew cleanup"
+
+################################################################################
+# Machine-local overrides — ~/.zsh_local if it exists. Anything too specific to
+# this setup to belong in a config other people read.
+################################################################################
+[[ -f "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
+
 ################################################################################
 # Line-editor plugins — these must come last.
 #
