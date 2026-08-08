@@ -1,0 +1,159 @@
+// Rosé Pine "graphite" fastfetch config.
+//
+// Hand-edited. Colours are literal hex/SGR, so a palette change is a
+// find-and-replace across this file. Only foregrounds are themed here --
+// nothing in fastfetch paints a background, so the graphite ramp never
+// appears; these are stock Rosé Pine main hues.
+//
+// Rails are 51 cells corner to corner -- the longest module line (HOST) is 48,
+// so they clear it by 2. The title string is near the top of the modules list.
+//
+// The logo is an image over the iTerm inline-image protocol, which WezTerm
+// speaks. 33x18 cells: a 3-row fully transparent bar above the 15-row
+// artwork, which is what drops the art level with the info blocks --
+// `padding.top` cannot do it. Rebuild the image with make_logo.py; width
+// tracks the source aspect, so let the script print both numbers.
+// luffy.txt is the text-logo fallback for running fastfetch outside WezTerm,
+// since only WezTerm here speaks the iterm image protocol.
+//
+// Renders 89 columns wide. wezterm/dashboard.lua pins LEFT_COLS to
+// 90; if the logo width or the rail width changes here, change it there too.
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "display": {
+    "key": {
+      "width": 14
+    },
+    "separator": "",
+    "color": {
+      "output": "#e0def4"
+    }
+  },
+  "logo": {
+    "type": "iterm",
+    "source": "~/.config/fastfetch/logo.png",
+    "width": 33,
+    "height": 18,
+    "padding": {
+      "top": 2,
+      "left": 2,
+      "right": 3
+    }
+  },
+  "modules": [
+    "break",
+    {
+      "type": "command",
+      "key": "  \u001b[38;2;235;111;146m● \u001b[38;2;246;193;119m● \u001b[38;2;49;116;143m●  \u001b[38;2;110;106;134m· · · · · · · ·  \u001b[38;2;156;207;216m",
+      "keyColor": "#9ccfd8",
+      "text": "(scutil --get LocalHostName 2>/dev/null || hostname -s) | tr 'a-z-' 'A-Z '"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;49;116;143m╭─────────────────────────────────────────────────╮\u001b[0m"
+    },
+    {
+      "type": "command",
+      "key": " 󰀄  USER",
+      "keyColor": "#9ccfd8",
+      "text": "echo $USER@$(scutil --get LocalHostName 2>/dev/null || hostname -s)"
+    },
+    {
+      "type": "os",
+      "key": " 󰀵  OS",
+      "keyColor": "#9ccfd8",
+      "format": "{name} {version}"
+    },
+    {
+      "type": "host",
+      "key": " 󰌢  HOST",
+      "keyColor": "#9ccfd8",
+      "format": "{name}"
+    },
+    {
+      "type": "kernel",
+      "key": "   KERNEL",
+      "keyColor": "#c4a7e7",
+      "format": "{sysname} {release}"
+    },
+    {
+      "type": "packages",
+      "key": " 󰏖  PKGS",
+      "keyColor": "#c4a7e7"
+    },
+    {
+      "type": "display",
+      "key": " 󰍹  DISPLAY",
+      "keyColor": "#c4a7e7",
+      "format": "{width}x{height} @ {refresh-rate} Hz"
+    },
+    {
+      "type": "terminal",
+      "key": " 󰆍  TERM",
+      "keyColor": "#31748f",
+      "format": "{pretty-name}"
+    },
+    {
+      "type": "shell",
+      "key": " 󰞷  SHELL",
+      "keyColor": "#31748f",
+      "format": "{pretty-name} {version}"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;49;116;143m╰─────────────────────────────────────────────────╯\u001b[0m"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;235;111;146m╭─────────────────────────────────────────────────╮\u001b[0m"
+    },
+    {
+      "type": "cpu",
+      "key": " 󰻠  CPU",
+      "keyColor": "#eb6f92",
+      "format": "{name}"
+    },
+    {
+      "type": "gpu",
+      "key": " 󰢮  GPU",
+      "keyColor": "#eb6f92",
+      "format": "{name}"
+    },
+    {
+      "type": "memory",
+      "key": " 󰍛  RAM",
+      "keyColor": "#ebbcba",
+      "format": "{used} / {total} ({percentage})"
+    },
+    {
+      "type": "disk",
+      "key": " 󰋊  DISK",
+      "keyColor": "#ebbcba",
+      "folders": "/",
+      "format": "{size-used} / {size-total} ({size-percentage})"
+    },
+    {
+      "type": "battery",
+      "key": " 󰁹  BAT",
+      "keyColor": "#f6c177",
+      "format": "{capacity} ({status})"
+    },
+    {
+      "type": "uptime",
+      "key": " 󰥔  UPTIME",
+      "keyColor": "#f6c177"
+    },
+    {
+      "type": "custom",
+      "format": "\u001b[38;2;235;111;146m╰─────────────────────────────────────────────────╯\u001b[0m"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "    \u001b[38;2;235;111;146m● \u001b[38;2;246;193;119m● \u001b[38;2;235;188;186m● \u001b[38;2;49;116;143m● \u001b[38;2;156;207;216m● \u001b[38;2;196;167;231m●\u001b[0m"
+    },
+    "break"
+  ]
+}

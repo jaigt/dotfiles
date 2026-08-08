@@ -1,0 +1,73 @@
+{
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/herdr-agent-state.sh\" session",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "anthropic-skills@inline": false,
+    "claude-security@claude-plugins-official": true,
+    "code-review@claude-plugins-official": false,
+    "code-review@inline": false,
+    "data@inline": false,
+    "design@inline": false,
+    "earnings-reviewer@inline": false,
+    "engineering@inline": false,
+    "equity-research@inline": false,
+    "finance@inline": false,
+    "financial-analysis@inline": false,
+    "github@claude-plugins-official": false,
+    "market-researcher@inline": false,
+    "model-builder@inline": false,
+    "obsidian@inline": false,
+    "obsidian@obsidian-skills": true,
+    "playwright@claude-plugins-official": false,
+    "productivity@inline": false,
+    "ralph-loop@claude-plugins-official": false,
+    "ralph-loop@inline": false,
+    "security-guidance@claude-plugins-official": true,
+    "skill-creator@claude-plugins-official": true,
+    "skill-creator@inline": false,
+    "superpowers@claude-plugins-official": false,
+    "superpowers@inline": false,
+    "valuation-reviewer@inline": false,
+    "warp@claude-code-warp": true,
+    "wealth-management@inline": false
+  },
+  "extraKnownMarketplaces": {
+    "claude-code-warp": {
+      "source": {
+        "source": "github",
+        "repo": "warpdotdev/claude-code-warp"
+      }
+    },
+    "obsidian-skills": {
+      "source": {
+        "source": "github",
+        "repo": "kepano/obsidian-skills"
+      }
+    }
+  },
+  "awaySummaryEnabled": false,
+  "tui": "fullscreen",
+  "skipDangerousModePermissionPrompt": true,
+  "theme": "auto",
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true
+}

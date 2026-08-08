@@ -1,0 +1,11 @@
+onboarding = false
+
+[ui.sound]
+enabled = false
+
+[theme]
+name = "rose-pine"
+auto_switch = false
+
+[keys]
+prefix = "ctrl+space"

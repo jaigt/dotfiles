@@ -1,0 +1,51 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Waybar-style bar prompt.
+#
+#    icon  path  branch
+#
+# The closing cap is carried by [character] -- the only module that
+# renders on every single prompt.
+#
+# Linux copy (home-linux). Colors go through [palettes.noctalia]: the marked
+# block below is the Kanagawa-hybrid default, and Noctalia's starship template
+# swaps it for wallpaper colors in a merged machine-local copy at
+# ~/.config/starship-noctalia.toml (.zshrc points STARSHIP_CONFIG there when
+# it exists). Edit prompt structure here; it flows into the merged copy on
+# the next wallpaper/template render.
+
+palette = "noctalia"
+
+format = "$directory${custom.git}$character"
+
+add_newline = false
+command_timeout = 1000
+
+[directory]
+format = "[](fg:accent)[ 󰉋 ](bg:accent fg:on_accent)[ $path ](bg:label_bg fg:text)"
+truncation_length = 3
+truncation_symbol = "…/"
+truncate_to_repo = true
+
+# Replaces git_branch + git_status; see the note at the top of the
+# generator. Renders nothing outside a repo.
+[custom.git]
+description = "branch name, with * if the tree is dirty"
+when = "git rev-parse --is-inside-work-tree >/dev/null 2>&1"
+command = "b=$(git symbolic-ref --short -q HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null || git rev-parse --short HEAD 2>/dev/null); [ -n \"$b\" ] || exit 0; [ -n \"$(git status --porcelain 2>/dev/null | head -n1)\" ] && b=\"$b*\"; printf %s \"$b\""
+format = "[](bg:label_bg fg:divider)[  $output ](bg:label_bg fg:accent)"
+
+[character]
+format = "[](fg:label_bg) $symbol "
+success_symbol = "[❯](bold accent)"
+error_symbol = "[❯](bold error)"
+
+# >>> NOCTALIA PALETTE (replaced in the merged machine-local copy) >>>
+[palettes.noctalia]
+accent = "#7FB4CA"
+on_accent = "#181616"
+label_bg = "#282727"
+text = "#DCD7BA"
+divider = "#727169"
+error = "#E82424"
+# <<< NOCTALIA PALETTE <<<

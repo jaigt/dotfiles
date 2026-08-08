@@ -1,0 +1,303 @@
+{
+  "_note": "key-set + role template; values are $PALETTE tokens, resolved by gen_zed_theme.py",
+  "appearance": "dark",
+  "style": {
+    "editor.foreground": "$FG",
+    "editor.background": "$transparent",
+    "editor.gutter.background": "$transparent",
+    "editor.active_line.background": "$FG+0d",
+    "editor.line_number": "$GRAY",
+    "editor.active_line_number": "$FG",
+    "editor.indent_guide": "$GRAY+88",
+    "editor.indent_guide_active": "$FG_DIM+aa",
+    "editor.invisible": "$GRAY",
+    "editor.wrap_guide": "$GRAY+44",
+    "editor.active_wrap_guide": "$GRAY+88",
+    "editor.document_highlight.read_background": "$BLUE2+33",
+    "editor.document_highlight.write_background": "$GRAY+66",
+    "editor.subheader.background": "$BG_M1",
+    "editor.highlighted_line.background": "$BG_M1",
+    "ghost_element.active": "$FG_DIM",
+    "ghost_element.hover": "$BG_P2",
+    "ghost_element.selected": "$BG_P3",
+    "ghost_element.background": "$BG_M1",
+    "border": "$BG_P2+40",
+    "border.variant": "$BG_P2+20",
+    "border.focused": "$BG_M1",
+    "border.selected": "$BG_M1",
+    "border.transparent": "transparent",
+    "border.disabled": "$BG_M1",
+    "text": "$FG",
+    "text.muted": "$GRAY",
+    "text.placeholder": "$GRAY",
+    "text.disabled": "$GRAY",
+    "text.accent": "$BLUE2",
+    "surface.background": "$BG_P1+d0",
+    "elevated_surface.background": "$BG_P1+d0",
+    "panel.background": "$transparent",
+    "panel.focused_border": "$VIOLET",
+    "background": "$BG+d0",
+    "status_bar.background": "$BG+d0",
+    "title_bar.background": "$BG+d0",
+    "title_bar.inactive_background": "$BG+d0",
+    "toolbar.background": "$transparent",
+    "tab_bar.background": "$transparent",
+    "tab.inactive_background": "$transparent",
+    "tab.active_background": "$FG+14",
+    "element.background": "$BG_M1",
+    "element.hover": "$BG_P1",
+    "element.active": "$BG_P1",
+    "element.selected": "$BG_P3",
+    "element.disabled": "$BG_P1",
+    "drop_target.background": "$FG+80",
+    "predictive": "$GRAY",
+    "modified": "$YELLOW2",
+    "ignored": "$GRAY",
+    "deleted": "$RED",
+    "created": "$GREEN2",
+    "warning": "$D_WARN",
+    "warning.background": "$D_WARN",
+    "warning.border": "$D_WARN",
+    "hint": "$AQUA",
+    "hint.background": "$AQUA",
+    "error": "$D_ERROR",
+    "error.background": "$D_ERROR",
+    "error.border": "$D_ERROR",
+    "info": "$D_INFO",
+    "scrollbar.thumb.background": "$BG_P2+4d",
+    "scrollbar.thumb.hover_background": "$BG_M1+4d",
+    "scrollbar.thumb.border": "$BG_M1+4d",
+    "scrollbar.track.background": "$transparent",
+    "scrollbar.track.border": "$transparent",
+    "terminal.background": "$transparent",
+    "terminal.foreground": "$FG",
+    "terminal.bright_foreground": "$FG",
+    "terminal.dim_foreground": "$BG",
+    "terminal.ansi.black": "$INK0",
+    "terminal.ansi.bright_black": "$GRAY",
+    "terminal.ansi.dim_black": "$INK0",
+    "terminal.ansi.red": "$RED",
+    "terminal.ansi.bright_red": "$D_ERROR",
+    "terminal.ansi.dim_red": "$RED",
+    "terminal.ansi.green": "$GREEN",
+    "terminal.ansi.bright_green": "$GREEN2",
+    "terminal.ansi.dim_green": "$GREEN",
+    "terminal.ansi.yellow": "$YELLOW",
+    "terminal.ansi.bright_yellow": "$YELLOW2",
+    "terminal.ansi.dim_yellow": "$YELLOW",
+    "terminal.ansi.blue": "$BLUE",
+    "terminal.ansi.bright_blue": "$BLUE2",
+    "terminal.ansi.dim_blue": "$BLUE",
+    "terminal.ansi.magenta": "$VIOLET",
+    "terminal.ansi.bright_magenta": "$VIOLET2",
+    "terminal.ansi.dim_magenta": "$VIOLET",
+    "terminal.ansi.cyan": "$AQUA",
+    "terminal.ansi.bright_cyan": "$AQUA2",
+    "terminal.ansi.dim_cyan": "$AQUA",
+    "terminal.ansi.white": "$FG_DIM",
+    "terminal.ansi.bright_white": "$FG",
+    "terminal.ansi.dim_white": "$FG_DIM",
+    "link_text.hover": "$BLUE2",
+    "conflict": "$ORANGE",
+    "conflict.background": "$ORANGE",
+    "conflict.border": "$ORANGE",
+    "created.background": "$GREEN2",
+    "created.border": "$GREEN2",
+    "deleted.background": "$RED",
+    "deleted.border": "$RED",
+    "hidden.background": "$GRAY",
+    "hidden.border": "$GRAY",
+    "ignored.background": "$GRAY",
+    "ignored.border": "$GRAY",
+    "info.background": "$D_INFO",
+    "info.border": "$D_INFO",
+    "modified.background": "$YELLOW2",
+    "modified.border": "$YELLOW2",
+    "predictive.background": "$GRAY",
+    "predictive.border": "$GRAY",
+    "renamed.background": "$BLUE",
+    "renamed.border": "$BLUE",
+    "success": "$GREEN2",
+    "success.background": "$GREEN2",
+    "success.border": "$GREEN2",
+    "unreachable": "$FG_DIM",
+    "unreachable.background": "$BG",
+    "unreachable.border": "$BG_M1",
+    "version_control.added": "$GREEN2",
+    "version_control.deleted": "$RED",
+    "version_control.modified": "$YELLOW2",
+    "version_control.conflict": "$ORANGE",
+    "version_control.renamed": "$BLUE",
+    "version_control.ignored": "$GRAY",
+    "version_control.conflict_marker.ours": "$GREEN",
+    "version_control.conflict_marker.theirs": "$BLUE",
+    "vim.normal.background": "$BLUE2",
+    "vim.normal.foreground": "$BG",
+    "vim.insert.background": "$GREEN2",
+    "vim.insert.foreground": "$BG",
+    "vim.replace.background": "$RED_W",
+    "vim.replace.foreground": "$BG",
+    "vim.visual.background": "$VIOLET",
+    "vim.visual.foreground": "$BG",
+    "vim.visual_line.background": "$VIOLET",
+    "vim.visual_line.foreground": "$BG",
+    "vim.visual_block.background": "$VIOLET",
+    "vim.visual_block.foreground": "$BG",
+    "vim.helix_normal.background": "$BLUE2",
+    "vim.helix_normal.foreground": "$BG",
+    "vim.helix_select.background": "$VIOLET",
+    "vim.helix_select.foreground": "$BG",
+    "players": [
+      {
+        "cursor": "$BLUE",
+        "background": "$BLUE",
+        "selection": "$BLUE"
+      },
+      {
+        "cursor": "$VIOLET",
+        "background": "$VIOLET",
+        "selection": "$VIOLET"
+      },
+      {
+        "cursor": "$GREEN2",
+        "background": "$GREEN2",
+        "selection": "$GREEN2"
+      },
+      {
+        "cursor": "$ORANGE",
+        "background": "$ORANGE",
+        "selection": "$ORANGE"
+      },
+      {
+        "cursor": "$PINK",
+        "background": "$PINK",
+        "selection": "$PINK"
+      }
+    ],
+    "syntax": {
+      "attribute": {
+        "color": "$BLUE2"
+      },
+      "boolean": {
+        "color": "$ORANGE"
+      },
+      "comment": {
+        "color": "$GRAY",
+        "font_style": "italic"
+      },
+      "comment.doc": {
+        "color": "$GRAY"
+      },
+      "constant": {
+        "color": "$ORANGE"
+      },
+      "constructor": {
+        "color": "$BLUE"
+      },
+      "embedded": {
+        "color": "$FG"
+      },
+      "emphasis": {
+        "color": "$BLUE",
+        "font_style": "italic"
+      },
+      "emphasis.strong": {
+        "color": "$BLUE",
+        "font_weight": 700
+      },
+      "enum": {
+        "color": "$ORANGE"
+      },
+      "function": {
+        "color": "$BLUE"
+      },
+      "hint": {
+        "color": "$AQUA"
+      },
+      "keyword": {
+        "color": "$VIOLET"
+      },
+      "label": {
+        "color": "$BLUE2"
+      },
+      "link_text": {
+        "color": "$ORANGE"
+      },
+      "link_uri": {
+        "color": "$AQUA2"
+      },
+      "number": {
+        "color": "$PINK"
+      },
+      "operator": {
+        "color": "$YELLOW"
+      },
+      "predictive": {
+        "color": "$GRAY"
+      },
+      "preproc": {
+        "color": "$RED_W"
+      },
+      "primary": {
+        "color": "$FG"
+      },
+      "property": {
+        "color": "$YELLOW2"
+      },
+      "punctuation": {
+        "color": "$PUNCT"
+      },
+      "punctuation.bracket": {
+        "color": "$PUNCT"
+      },
+      "punctuation.delimiter": {
+        "color": "$PUNCT"
+      },
+      "punctuation.list_marker": {
+        "color": "$PUNCT",
+        "font_weight": 700
+      },
+      "ion.special": {
+        "color": "$YELLOW2"
+      },
+      "string": {
+        "color": "$GREEN2"
+      },
+      "string.escape": {
+        "color": "$YELLOW"
+      },
+      "string.regex": {
+        "color": "$YELLOW"
+      },
+      "string.special": {
+        "color": "$ORANGE2"
+      },
+      "string.special.symbol": {
+        "color": "$ORANGE2"
+      },
+      "tag": {
+        "color": "$BLUE"
+      },
+      "text.literal": {
+        "color": "$GREEN2"
+      },
+      "title": {
+        "color": "$YELLOW2",
+        "font_weight": 700
+      },
+      "type": {
+        "color": "$AQUA2"
+      },
+      "variable": {
+        "color": "$FG"
+      },
+      "variable.special": {
+        "color": "$PARAM"
+      },
+      "variant": {
+        "color": "$ORANGE"
+      }
+    },
+    "background.appearance": "blurred"
+  }
+}

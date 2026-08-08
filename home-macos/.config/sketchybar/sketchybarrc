@@ -1,0 +1,41 @@
+#!/usr/bin/env lua
+--
+-- SketchyBar — configured in Lua via SbarLua.
+--   [ logo · front app · git ]        [ media · claude · volume · wifi · battery · clock ]
+--
+-- SbarLua is built from source and pinned to Lua's ABI (5.5 at time of
+-- writing). If the bar fails to start after a `brew upgrade lua`, the module
+-- needs rebuilding; the block below does that when it's missing.
+
+local module_dir = os.getenv("HOME") .. "/.local/share/sketchybar_lua"
+
+local function module_present()
+  local f = io.open(module_dir .. "/sketchybar.so", "r")
+  if f then f:close() return true end
+  return false
+end
+
+if not module_present() then
+  os.execute(
+    "git clone --depth 1 https://github.com/FelixKratz/SbarLua.git /tmp/SbarLua"
+      .. " && make -C /tmp/SbarLua install"
+      .. " && rm -rf /tmp/SbarLua"
+  )
+end
+
+package.cpath = package.cpath .. ";" .. module_dir .. "/?.so"
+package.path = package.path
+  .. ";" .. os.getenv("HOME") .. "/.config/sketchybar/?.lua"
+  .. ";" .. os.getenv("HOME") .. "/.config/sketchybar/?/init.lua"
+
+sbar = require("sketchybar")
+
+-- Batch the whole initial config into one message; one round trip per property
+-- makes the bar visibly assemble itself.
+sbar.begin_config()
+require("init")
+sbar.hotload(true)
+sbar.end_config()
+
+-- Required: without this the script exits and every subscription dies with it.
+sbar.event_loop()

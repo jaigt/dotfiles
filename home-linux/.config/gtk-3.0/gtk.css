@@ -1,0 +1,70 @@
+/* Kanagawa Thunar — Finder-ish: dim sidebar, flat toolbar, pill selection.
+ * Scoped to Thunar's .thunar window class; everything else keeps Materia.
+ * Palette: docs/kanagawa.md */
+
+window.thunar {
+  background-color: #181616;
+  color: #DCD7BA;
+}
+
+/* Sidebar — darker pane like the Finder sidebar */
+window.thunar .sidebar,
+window.thunar .sidebar treeview {
+  background-color: #12120f;
+  color: #C8C093;
+}
+window.thunar .sidebar treeview:selected {
+  background-color: #393836;
+  color: #DCD7BA;
+}
+
+/* Toolbar — flat, blends into the content like a headerbar */
+window.thunar toolbar {
+  background-color: #181616;
+  border-bottom: 1px solid #393836;
+  padding: 2px 6px;
+}
+window.thunar toolbar button {
+  background: none;
+  border: none;
+  box-shadow: none;
+  border-radius: 6px;
+  min-height: 26px;
+}
+window.thunar toolbar button:hover {
+  background-color: #282727;
+}
+window.thunar toolbar entry {
+  background-color: #0d0c0c;
+  color: #DCD7BA;
+  border: 1px solid #393836;
+  border-radius: 6px;
+}
+
+/* File view */
+window.thunar .view {
+  background-color: #181616;
+  color: #DCD7BA;
+}
+window.thunar .view:selected {
+  background-color: #393836;
+  color: #DCD7BA;
+}
+
+/* Status bar */
+window.thunar statusbar {
+  background-color: #12120f;
+  border-top: 1px solid #393836;
+  color: #727169;
+}
+
+/* Slim scrollbars */
+window.thunar scrollbar slider {
+  background-color: #393836;
+  border-radius: 6px;
+  min-width: 6px;
+  min-height: 6px;
+}
+window.thunar scrollbar trough {
+  background-color: transparent;
+}

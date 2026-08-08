@@ -1,0 +1,9 @@
+[Hotkey]
+EnumerateWithTriggerKeys=True
+# Empty on purpose: kills the built-in Left Shift "temporally switch IM" default
+AltTriggerKeys=
+
+# Ctrl+Space or Right Alt toggles English <-> Hangul
+[Hotkey/TriggerKeys]
+0=Control+space
+1=Alt_R
