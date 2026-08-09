@@ -112,6 +112,10 @@ nv() {
   nvim "$@"
 }
 
+alias vim="nvim"
+alias vi="nvim"
+alias v="nvim"
+
 # Review changes without "opening an editor": straight into the codediff
 # explorer, q exits back to the shell. `gdiff` = working tree, `gdiff main...`
 # = branch compare, `gdiff --staged` = what the next commit contains.
