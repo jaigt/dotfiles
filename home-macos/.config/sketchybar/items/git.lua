@@ -2,8 +2,6 @@ local colors = require("colors")
 local icons = require("icons")
 local settings = require("settings")
 
--- Branch and working-tree state of whatever repo the frontmost WezTerm pane is
--- sitting in. Hidden when the front app isn't WezTerm or it isn't a repo.
 
 local WEZTERM = "/Applications/WezTerm.app/Contents/MacOS/wezterm"
 
@@ -22,8 +20,7 @@ local git = sbar.add("item", "git", {
     padding_right = 10,
   },
   drawing = false,
-  -- Required: with the inherited updates = "when_shown", an item that hides
-  -- itself never runs again and so can never come back.
+  -- Required: see default.lua.
   updates = "on",
   update_freq = 10,
 })
@@ -59,7 +56,6 @@ local function hide()
   git:set({ drawing = false, popup = { drawing = false } })
 end
 
--- cwd is interpolated into shell commands, so it has to be quoted properly.
 local function shquote(s)
   return "'" .. s:gsub("'", "'\\''") .. "'"
 end
@@ -72,23 +68,12 @@ local function pane_cwd(p)
   return url_decode((p.cwd:gsub("^file://[^/]*", "")))
 end
 
--- Resolve the directory of the pane the user is actually looking at.
---
--- `wezterm cli list` marks one pane per tab as is_active, so it yields several
--- candidates; list-clients names the single focused_pane_id.
---
--- Both subcommands reach the mux through
--- ~/.local/share/wezterm/default-org.wezfurlong.wezterm, and while that symlink
--- still points at a gui-sock-* left behind by an exited GUI they both fail — so
--- list-clients yielding nothing is not evidence that WezTerm went away. Hence:
--- fall back to the active pane when only list-clients is unusable, and when
--- *neither* answers, leave the item as it is rather than calling hide(), which
--- would clear current_cwd and make the pill blink on every tick landing in the
--- gap. --no-auto-start makes the failing case fail immediately instead of
--- spending ~2.5s spawning a wezterm-mux-server that cannot bind the dead
--- socket either.
---
--- sbar.exec parses JSON output straight into a Lua table, hence no jq.
+-- `cli list` marks one pane per tab active, so list-clients is what names the
+-- single focused one. Both fail together while wezterm's mux symlink points at
+-- a dead socket, so an empty list-clients is NOT evidence wezterm went away —
+-- fall back to the active pane, and if neither answers leave the item alone
+-- rather than hide(), which would blink the pill on every tick in the gap.
+-- --no-auto-start makes that case fail fast instead of spawning a mux-server.
 local CLI = WEZTERM .. " cli --no-auto-start "
 
 local function with_focused_cwd(fn)
@@ -111,8 +96,7 @@ local function with_focused_cwd(fn)
 end
 
 local function update()
-  -- Match on bundle id, not name: the frontmost *process* is "wezterm-gui", so
-  -- comparing against "WezTerm" silently never matches.
+  -- Bundle id, not name: the frontmost process is "wezterm-gui".
   sbar.exec([[sh -c 'lsappinfo info -only bundleid "$(lsappinfo front)" ]]
     .. [[| sed -n "s/.*bundleID=\"\([^\"]*\)\".*/\1/p" | head -1']],
     function(bundle)
@@ -123,15 +107,12 @@ local function update()
 
       with_focused_cwd(function(cwd)
         local q = shquote(cwd)
-        -- --no-optional-locks so this never blocks on, or writes to, a repo the
+        -- --no-optional-locks so this never blocks on or writes to a repo the
         -- user is mid-operation in.
         --
-        -- No `sh -c '...'` wrapper: sbar.exec already hands this to popen(),
-        -- which is itself /bin/sh -c. Wrapping it again put q's own quotes
-        -- inside the wrapper's, so the outer shell reopened them and re-parsed
-        -- the directory name — a cwd with a space split the command, and one
-        -- containing $(...) ran as code. The gh block below always did it this
-        -- way; these two now match it.
+        -- No `sh -c` wrapper: sbar.exec is already /bin/sh -c, and double
+        -- wrapping re-parses q's quoting — a cwd containing $(...) then runs
+        -- as code.
         sbar.exec("cd " .. q .. " 2>/dev/null || exit 0; "
           .. "git --no-optional-locks rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0; "
           .. "b=$(git --no-optional-locks branch --show-current 2>/dev/null); "
@@ -158,7 +139,7 @@ end
 local function fill_popup()
   if not current_cwd then return end
   local q = shquote(current_cwd)
-  -- Unwrapped for the same reason as update()'s block above.
+  -- Unwrapped, same reason as update() above.
   sbar.exec("cd " .. q .. " 2>/dev/null || exit 0; "
     .. "basename \"$(git --no-optional-locks rev-parse --show-toplevel 2>/dev/null)\"; "
     .. "git --no-optional-locks rev-list --left-right --count @{upstream}...HEAD 2>/dev/null "
@@ -174,13 +155,9 @@ local function fill_popup()
       sbar.set("git.changes", { label = lines[3] or "—" })
     end)
 
-  -- CI and pull request state, via gh. Separate from the git block above so the
-  -- local rows fill instantly and these two land when the network does. Only
-  -- ever on click — this is the one thing here that touches the network.
-  --
-  -- `gh pr view` exits non-zero when the branch has no PR, and `gh run list`
-  -- returns an empty array rather than an error when a repo has no workflows,
-  -- so the two need different fallbacks.
+  -- Split from the git block so the local rows fill without waiting on the
+  -- network. `gh pr view` exits non-zero with no PR; `gh run list` returns an
+  -- empty array — hence the different fallbacks.
   sbar.exec("cd " .. q .. " 2>/dev/null || exit 0; "
     .. "gh repo view --json nameWithOwner >/dev/null 2>&1 "
     .. "|| { echo 'not on GitHub'; echo '—'; exit 0; }; "
@@ -209,7 +186,6 @@ git:subscribe("mouse.exited.global", function()
   git:set({ popup = { drawing = false } })
 end)
 
--- Populate once at load: there is no sbar.update() to force a first tick.
 update()
 
 return git

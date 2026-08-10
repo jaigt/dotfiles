@@ -8,8 +8,8 @@ sbar.bar({
   sticky = true,
 
   -- topmost, not notch_display_height, is what decides where the bar sits:
-  --   false -> bar at y=32, below the notch    true -> y=0, menu bar strip
-  -- So "below" needs it off and "replace" needs it on. Must be set here, not in
+  -- off puts it below the notch, on puts it in the menu bar strip. So "below"
+  -- needs it off and "replace" needs it on. Must be set here, not in
   -- init.lua: a later sbar.bar() call inside the batched begin_config /
   -- end_config block does not take effect for this property.
   topmost = (settings.mode == "replace"),

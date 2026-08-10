@@ -1,8 +1,5 @@
 #!/bin/bash
-# Two-line Claude Code status line:
-#   Fable 5 │ Effort: High │ .claude │ main* │ +12/-4
-#   Context ████░░░░░░ 50% (501.5k / 1M) │ 5h ██░░░░░░░░ 15% (3h 54m)
-# Segments drop out cleanly when their data is absent (older CLI versions).
+# Two-line Claude Code status line. Segments drop out when their data is absent.
 
 input=$(cat)
 
@@ -23,7 +20,6 @@ ctx_used_tokens=$(echo "$input" | jq -r '.context_window.current_usage // empty 
 limit_5h=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty | if . == "" then . else round end')
 resets_5h=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
 
-# Abbreviate directory: ~ for home, basename otherwise
 if [ -z "$cwd" ]; then
   dir=""
 elif [ "$cwd" = "$HOME" ]; then
@@ -32,15 +28,13 @@ else
   dir=$(basename "$cwd")
 fi
 
-# Git branch, only when cwd is inside a git repo. Skip optional locks so this
-# never blocks on/mutates the repo (e.g. during concurrent git operations).
+# --no-optional-locks so this never blocks on or mutates a repo mid-operation.
 branch=""
 if [ -n "$cwd" ] && git -C "$cwd" --no-optional-locks rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   branch=$(git -C "$cwd" --no-optional-locks branch --show-current 2>/dev/null)
   if [ -z "$branch" ]; then
     branch=$(git -C "$cwd" --no-optional-locks rev-parse --short HEAD 2>/dev/null)
   fi
-  # Mark uncommitted changes (staged, unstaged, or untracked) with *
   if [ -n "$branch" ] && [ -n "$(git -C "$cwd" --no-optional-locks status --porcelain 2>/dev/null | head -1)" ]; then
     branch="${branch}*"
   fi
@@ -102,7 +96,7 @@ case "$effort" in
   *) effort_label="$effort" ;;
 esac
 
-# ── Line 1: model │ effort │ thinking │ dir │ branch ──
+# ── Line 1 ──
 line1=""
 [ -n "$model" ] && line1="${BOLD}${model}${RESET}"
 if [ -n "$effort_label" ]; then
@@ -122,7 +116,7 @@ if [ -n "$lines_added" ] || [ -n "$lines_removed" ]; then
   line1="${line1}${DIM_GREEN}+${lines_added:-0}${RESET}${DIM}/${RESET}${DIM_RED}-${lines_removed:-0}${RESET}"
 fi
 
-# ── Line 2: context bar │ 5h bar │ 7d bar ──
+# ── Line 2 ──
 line2=""
 if [ -n "$ctx_used_pct" ]; then
   line2="${DIM}Context ${RESET}$(make_bar "$ctx_used_pct" 10 "$PURPLE") ${PURPLE}${ctx_used_pct}%${RESET}"

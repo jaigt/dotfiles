@@ -1,19 +1,15 @@
--- Statusline, icons, and the keymap hint popup.
-
 require("mini.icons").setup()
--- Some plugins still ask for nvim-web-devicons by name. This makes mini.icons
--- answer to that name too, so we don't need to install a second icon plugin.
+-- Lets mini.icons answer to nvim-web-devicons, which some plugins still ask
+-- for by name — saves installing a second icon plugin.
 MiniIcons.mock_nvim_web_devicons()
 
--- which-key -------------------------------------------------------------------
--- Reads the `desc` field from every keymap, so a binding defined without a
--- desc shows up as a blank. That's why keymaps.lua sets desc on all of them.
+-- which-key reads each keymap's `desc`; one defined without it shows as a
+-- blank row.
 require("which-key").setup({
-	preset = "helix", -- side panel rather than a bottom strip
+	preset = "helix",
 	delay = 400,
 })
 
--- Group labels.
 require("which-key").add({
 	{ "<leader>f", group = "find" },
 	{ "<leader>s", group = "search" },
@@ -29,8 +25,7 @@ require("which-key").add({
 	{ "[", group = "previous" },
 })
 
--- Breadcrumbs -----------------------------------------------------------------
--- "Class > method > block" for wherever the cursor is, off the treesitter tree.
+-- Breadcrumbs: "Class > method > block" for the cursor, off the treesitter tree.
 local BREADCRUMB_NODES = {
 	class_declaration = true,
 	class_definition = true,
@@ -45,7 +40,7 @@ local BREADCRUMB_NODES = {
 }
 
 local function breadcrumbs()
-	-- Bail on very large files: this runs on every statusline redraw.
+	-- Runs on every statusline redraw, so bail on very large files.
 	if vim.api.nvim_buf_line_count(0) > 20000 then
 		return ""
 	end
@@ -60,7 +55,6 @@ local function breadcrumbs()
 			local name = node:field("name")[1]
 			if name then
 				local got, text = pcall(vim.treesitter.get_node_text, name, 0)
-				-- Skip anonymous and absurdly long names rather than blow out the line.
 				if got and text and text ~= "" and #text < 30 and not text:find("\n") then
 					table.insert(parts, 1, text)
 				end
@@ -75,10 +69,10 @@ end
 -- lualine ---------------------------------------------------------------------
 require("lualine").setup({
 	options = {
-		-- The theme ships with rose-pine/neovim (lua/lualine/themes/rose-pine.lua),
-		-- not with lualine. colorscheme.lua restyles this when `<leader>uc` cycles.
+		-- The theme ships with rose-pine/neovim, not lualine. colorscheme.lua
+		-- restyles this on a cycle.
 		theme = vim.g.lualine_theme or "rose-pine",
-		globalstatus = true, -- one statusline for the window, not one per split
+		globalstatus = true,
 		section_separators = "",
 		component_separators = "|",
 	},
@@ -86,7 +80,7 @@ require("lualine").setup({
 		lualine_a = { "mode" },
 		lualine_b = { "branch" },
 		lualine_c = {
-			{ "filename", path = 1 }, -- relative to cwd
+			{ "filename", path = 1 },
 			{ breadcrumbs },
 		},
 		lualine_x = {
@@ -100,26 +94,22 @@ require("lualine").setup({
 	extensions = { "oil", "quickfix" },
 })
 
--- bufferline ------------------------------------------------------------------
--- Open buffers along the top. <S-h>/<S-l> move between them; <leader>, opens
--- the fuzzy list for when there are more than fit up there.
 require("bufferline").setup({
 	options = {
-		mode = "buffers", -- `close_command` unloads the buffer, it doesn't close a tab
-		diagnostics = "nvim_lsp", -- error/warning count on each buffer's label
+		mode = "buffers",
+		diagnostics = "nvim_lsp",
 		diagnostics_indicator = function(_, _, diag)
 			return (diag.error and " " .. diag.error or "") .. (diag.warning and " " .. diag.warning or "")
 		end,
 		show_buffer_close_icons = false,
 		separator_style = "thin",
-		always_show_bufferline = false, -- hide the bar when only one buffer is open
+		always_show_bufferline = false,
 		offsets = {
 			{ filetype = "oil", text = "Files", highlight = "Directory", separator = true },
 		},
 	},
 })
 
--- Mini Sessions
 require("mini.sessions").setup({
 	autoread = false,
 	autowrite = true,

@@ -1,14 +1,11 @@
--- Getting around: fuzzy finder and file explorers.
-
--- fzf-lua ---------------------------------------------------------------------
--- Wraps the Homebrew fzf binary, and uses fd for file listing.
+-- fzf-lua wraps the Homebrew fzf binary and uses fd for file listing.
 require("fzf-lua").setup({
 	"default-title",
 	winopts = {
 		height = 0.85,
 		width = 0.85,
 		preview = {
-			layout = "flex", -- preview on the right in a wide window, below in a narrow one
+			layout = "flex",
 			scrollbar = false,
 		},
 	},
@@ -21,16 +18,13 @@ require("fzf-lua").setup({
 	},
 })
 
--- Route vim.ui.select through fzf. That's the menu Neovim shows for "pick a
--- code action", "pick a definition when there are several" -- without this it's
--- a numbered list at the bottom of the screen.
+-- Routes vim.ui.select (pick-a-code-action, pick-a-definition) through fzf
+-- instead of a numbered list at the bottom of the screen.
 require("fzf-lua").register_ui_select()
 
--- oil.nvim --------------------------------------------------------------------
--- A directory opens as an ordinary, editable buffer; `:w` applies the edits.
--- Bound to `-` (see keymaps.lua).
+-- oil: a directory as an editable buffer; `:w` applies the edits.
 require("oil").setup({
-	default_file_explorer = true, -- take over from netrw, including for `nvim .`
+	default_file_explorer = true, -- takes over netrw, including `nvim .`
 	view_options = {
 		show_hidden = true,
 	},
@@ -39,8 +33,6 @@ require("oil").setup({
 	},
 })
 
--- neo-tree.nvim ---------------------------------------------------------------
--- Browse the filesystem as a tree in the sidebar.
 require("neo-tree").setup({
 	filesystem = {
 		hijack_netrw_behavior = "disabled",

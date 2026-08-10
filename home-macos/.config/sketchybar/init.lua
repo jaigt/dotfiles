@@ -4,36 +4,23 @@ require("bar")
 require("default")
 require("items")
 
--- There is deliberately no sbar.update() here, and there must not be: it does
--- not return. It flushes and then enters the event loop, so anything after it
--- in this file — and everything after require("init") back in sketchybarrc,
--- including hotload and end_config — silently never runs. Items populate
--- themselves by calling their own update once at load instead.
+-- Never call sbar.update() here: it does not return, so everything after it —
+-- including hotload and end_config in sketchybarrc — silently never runs.
+-- Items call their own update once at load instead.
 
--- --- position --------------------------------------------------------------
---
--- "replace" needs both topmost (set in bar.lua; with it off the bar stays below
--- the notch whatever else is set) and notch_display_height as an actual
--- *change* in value — assigning what it already holds is a no-op, hence the
--- step through 0.
+-- notch_display_height only takes effect as a *change* in value, hence the
+-- step through 0. "replace" also needs topmost, set in bar.lua.
 if settings.mode == "replace" then
   sbar.bar({ notch_display_height = 0 })
   sbar.bar({ notch_display_height = settings.bar_height })
 else
   sbar.bar({ notch_display_height = 0, y_offset = 0 })
 
-  -- Keep the bar clear of the notch regardless of the menu bar setting.
-  --
-  -- Sketchybar anchors to the *menu bar's* height, not to the notch: turn on
-  -- menu bar auto-hide and there is nothing to anchor to, so the bar rises to
-  -- y=0 and sits behind the notch. `_HIHideMenuBar` cannot be trusted to answer
-  -- this — it has been observed set and simply not applied — so measure where
-  -- the bar actually landed instead. Deferred because there is no geometry to
-  -- measure until the bar has been laid out.
-  --
-  -- It also has to RE-RUN: there is no sketchybar event for "the menu bar
-  -- setting changed", so this rides on the ambient ones; `front_app_switched`
-  -- alone fires often enough to self-correct within a keystroke of normal use.
+  -- Sketchybar anchors to the menu bar's height, not the notch, so auto-hiding
+  -- the menu bar drops the bar behind the notch. `_HIHideMenuBar` has been seen
+  -- set but not applied, so measure where the bar landed instead. Deferred
+  -- because there is no geometry until the bar is laid out, and re-run off
+  -- ambient events because there is no "menu bar setting changed" event.
   local function align()
     local ok, info = pcall(sbar.query, "left_pill")
     if not ok or type(info) ~= "table" or type(info.bounding_rects) ~= "table" then
@@ -51,15 +38,9 @@ else
       return
     end
 
-    -- Relative, not absolute: `y` is where the bar landed *with the current
-    -- offset already applied*, so assigning `top_inset - y` is only correct on
-    -- the very first run and compounds after that. The delta also corrects in
-    -- both directions, not just when the bar is too high.
-    --
-    -- The current offset is READ BACK from the bar rather than kept in an
-    -- upvalue: a local accumulator desyncs the moment anything else moves the
-    -- bar (`sketchybar --bar y_offset=...` from a shell), and the next
-    -- correction then overshoots by exactly the amount it was wrong.
+    -- `y` already includes the current offset, so this must be a delta, not an
+    -- assignment. Read the offset back from the bar rather than tracking it in
+    -- an upvalue, which desyncs if anything else moves the bar.
     local delta = settings.top_inset - y
     if math.abs(delta) >= 1 then
       local ok_bar, bar = pcall(sbar.query, "bar")
@@ -72,9 +53,7 @@ else
     align()
   end)
 
-  -- `updates = "on"` is required, not decorative: a `drawing = false` item
-  -- inherits `when_shown` and would never receive an event again. Same trap
-  -- git/media/claude document.
+  -- `updates = "on"` required: see default.lua.
   local aligner = sbar.add("item", "notch_aligner", {
     drawing = false,
     updates = "on",

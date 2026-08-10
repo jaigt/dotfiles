@@ -2,8 +2,6 @@ local colors = require("colors")
 local icons = require("icons")
 local settings = require("settings")
 
--- power_source_change fires on plug/unplug; the slow routine tick catches the
--- charge level drifting between those events.
 
 local battery = sbar.add("item", "battery", {
   position = "right",
@@ -49,7 +47,6 @@ end
 
 battery:subscribe({ "routine", "power_source_change", "system_woke", "forced" }, update)
 
--- Populate once at load: there is no sbar.update() to force a first tick.
 update()
 
 return battery

@@ -1,5 +1,4 @@
--- Keybindings. CMD+1..8 (jump to tab) and CMD+9 (last tab) are WezTerm
--- defaults, so they aren't listed here.
+-- CMD+1..9 tab-jumping is a WezTerm default, not listed here.
 
 local wezterm = require 'wezterm'
 local act = wezterm.action
@@ -13,7 +12,6 @@ function M.apply(config)
     { key = 'd', mods = 'CMD', action = act.SplitHorizontal { domain = 'CurrentPaneDomain' } },
     { key = 'd', mods = 'CMD|SHIFT', action = act.SplitVertical { domain = 'CurrentPaneDomain' } },
     { key = 'w', mods = 'CMD', action = act.CloseCurrentPane { confirm = false } },
-    -- WezTerm's close-tab bindings confirm first; these don't.
     { key = 'w', mods = 'CTRL|SHIFT', action = act.CloseCurrentTab { confirm = false } },
     { key = 'w', mods = 'CMD|SHIFT', action = act.CloseCurrentTab { confirm = false } },
     { key = 'Enter', mods = 'CMD', action = act.TogglePaneZoomState },
@@ -30,7 +28,7 @@ function M.apply(config)
 
     -- Tabs
     { key = 't', mods = 'CMD', action = act.SpawnTab 'CurrentPaneDomain' },
-    -- Dashboard: fastfetch / cmatrix / shells in a new maximized tab.
+    -- Dashboard in a new maximized tab; layout lives in dashboard.lua.
     {
       key = 'Enter',
       mods = 'CMD|SHIFT',
@@ -41,14 +39,10 @@ function M.apply(config)
     { key = '[', mods = 'CMD|SHIFT', action = act.ActivateTabRelative(-1) },
     { key = ']', mods = 'CMD|SHIFT', action = act.ActivateTabRelative(1) },
 
-    -- Cmd+V that also handles images.
-    --
-    -- PasteFrom(Clipboard) reads the clipboard as TEXT; an image has no text
-    -- flavor so it's dropped before the program sees it. Claude Code pastes
-    -- images by receiving a raw Ctrl+V and reading the clipboard itself, which
-    -- works only because WezTerm leaves Ctrl+V unbound.
-    -- So: text -> normal paste, no text -> forward Ctrl+V to the program.
-    -- The text probe is per-OS: pbpaste on macOS, wl-paste on Wayland.
+    -- PasteFrom(Clipboard) reads the clipboard as TEXT, so an image is dropped
+    -- before the program sees it. Claude Code reads the clipboard itself off a
+    -- raw Ctrl+V, which works only because WezTerm leaves Ctrl+V unbound. So:
+    -- text -> normal paste, no text -> forward Ctrl+V through.
     {
       key = 'v',
       mods = 'CMD',

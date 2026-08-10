@@ -12,13 +12,12 @@ Three things this does that a plain copy wouldn't:
    scales the alpha channel too, which would fog the transparent pad rows into
    an opaque block against WezTerm's blurred background.
 
-3. Pads the top with FULLY TRANSPARENT rows. fastfetch has no logo-only
-   vertical offset -- `logo.padding.top` prints newlines before the entire
-   render, so it moves the module column by exactly as much as the logo and the
-   gap between them never closes. Baking transparent rows into the image is the
-   only way to drop the art on its own.
+3. Pads the top with FULLY TRANSPARENT rows. Currently unused -- PAD_ROWS is 0
+   and `logo.padding.top` in config.jsonc does the offset, since it moves the
+   logo alone and leaves the module column at the top. Kept for offsets
+   padding.top can't express.
 
-   The bar has to be real alpha rather than a fill matching the terminal
+   Any pad has to be real alpha rather than a fill matching the terminal
    background: WezTerm runs at window_background_opacity 0.88 with blur, so any
    painted colour shows up as an opaque block against the blurred desktop.
 
@@ -33,6 +32,7 @@ config.jsonc.
 
 Needs Pillow.
 """
+
 import os
 import sys
 
@@ -42,9 +42,9 @@ SRC = os.path.expanduser("~/.config/fastfetch/luffy-gear5.png")
 OUT = os.path.expanduser("~/.config/fastfetch/logo.png")
 
 PHOTO_ROWS = 15  # how many terminal rows the art itself occupies
-PAD_ROWS = 3     # transparent rows above it; 3 puts the art on OS..BAT
-SAT = 0.72       # saturation multiplier; 1.0 is the source, 0.0 greyscale
-DIM = 0.90       # brightness multiplier; 0.90 lands pure white near #e0def4
+PAD_ROWS = 0  # transparent rows above it; logo.padding.top does this instead
+SAT = 0.72  # saturation multiplier; 1.0 is the source, 0.0 greyscale
+DIM = 0.90  # brightness multiplier; 0.90 lands pure white near #e0def4
 
 # Cell shape, px wide / px tall, measured off the layout this replaced:
 # a 1446x1328 crop that sat correctly in 32 cells x 15 rows.
@@ -83,8 +83,10 @@ def main():
     print(f"  cropped to alpha bbox {bbox} of {src}")
     print(f"  art {PHOTO_ROWS} rows + {PAD_ROWS} transparent")
     print(f"  muted to SAT {SAT}, DIM {DIM}")
-    print("  config.jsonc: set logo.width to "
-          f"{width_cells}, logo.height to {PHOTO_ROWS + PAD_ROWS}")
+    print(
+        "  config.jsonc: set logo.width to "
+        f"{width_cells}, logo.height to {PHOTO_ROWS + PAD_ROWS}"
+    )
 
 
 if __name__ == "__main__":

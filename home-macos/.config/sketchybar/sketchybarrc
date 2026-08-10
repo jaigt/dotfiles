@@ -1,11 +1,10 @@
 #!/usr/bin/env lua
 --
--- SketchyBar — configured in Lua via SbarLua.
---   [ logo · front app · git ]        [ media · claude · volume · wifi · battery · clock ]
+-- SketchyBar — configured in Lua via SbarLua. items/init.lua is the item list.
 --
--- SbarLua is built from source and pinned to Lua's ABI (5.5 at time of
--- writing). If the bar fails to start after a `brew upgrade lua`, the module
--- needs rebuilding; the block below does that when it's missing.
+-- SbarLua is built from source and pinned to the Lua ABI it was built against.
+-- If the bar fails to start after a `brew upgrade lua`, the module needs
+-- rebuilding; the block below does that when it's missing.
 
 local module_dir = os.getenv("HOME") .. "/.local/share/sketchybar_lua"
 

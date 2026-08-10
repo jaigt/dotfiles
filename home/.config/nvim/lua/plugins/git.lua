@@ -1,8 +1,3 @@
--- Git -- deliberately only the part a terminal can't do: in-buffer hunks,
--- staging one hunk out of five, and blame for the line under the cursor.
--- gitsigns owns the in-buffer side; codediff is the review UI (working-tree
--- explorer, branch compare, mergetool). Keymaps live in core/keymaps.lua.
-
 require("gitsigns").setup({
   signs = {
     add = { text = "▎" },

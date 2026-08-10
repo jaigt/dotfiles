@@ -2,7 +2,6 @@ local colors = require("colors")
 local icons = require("icons")
 local settings = require("settings")
 
--- How many Claude Code sessions are alive.
 
 local claude = sbar.add("item", "claude", {
   position = "right",
@@ -24,8 +23,6 @@ local claude = sbar.add("item", "claude", {
   popup = { align = "right" },
 })
 
--- Rows are pre-declared and hidden rather than added and removed each time the
--- popup opens.
 local MAX_ROWS = 5
 local rows = {}
 for i = 1, MAX_ROWS do
@@ -49,15 +46,12 @@ for i = 1, MAX_ROWS do
   })
 end
 
--- -x, not -f: matching the full command line would also catch the Claude
--- desktop app, this config's own shell-outs, and any editor with "claude" in a
--- path.
+-- -x, not -f: -f also matches the desktop app, our own shell-outs, and any
+-- editor with "claude" in a path.
 local function update()
   sbar.exec("pgrep -x claude | wc -l | tr -d ' '", function(out)
-    -- match, not gsub: gsub returns *two* values (the string and the
-    -- substitution count), and tonumber's second argument is the numeric base
-    -- — so tonumber(s:gsub(...)) throws "base out of range" and silently kills
-    -- the callback.
+    -- match, not gsub: gsub's second return is a count, which tonumber takes as
+    -- a base — "base out of range" kills the callback silently.
     local count = tonumber((out or ""):match("%d+")) or 0
     if count > 0 then
       claude:set({ drawing = true, label = tostring(count) })
@@ -95,7 +89,6 @@ claude:subscribe("mouse.exited.global", function()
   claude:set({ popup = { drawing = false } })
 end)
 
--- Populate once at load: there is no sbar.update() to force a first tick.
 update()
 
 return claude

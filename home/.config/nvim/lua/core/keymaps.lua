@@ -1,8 +1,3 @@
--- Keymaps.
---
--- Every mapping has a `desc`. That's not decoration -- which-key reads it, so a
--- binding without one shows up as a blank row in the hint popup.
-
 local map = vim.keymap.set
 local fzf = require("fzf-lua")
 local sessions = require("mini.sessions")
@@ -12,13 +7,11 @@ map("n", "<esc>", "<cmd>nohlsearch<cr>", { desc = "Clear search highlight" })
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, desc = "Down (visual line)" })
 map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, desc = "Up (visual line)" })
 
--- Keep the cursor centred when jumping half a page or through search results.
 map("n", "<C-d>", "<C-d>zz", { desc = "Half page down" })
 map("n", "<C-u>", "<C-u>zz", { desc = "Half page up" })
 map("n", "n", "nzzzv", { desc = "Next search result" })
 map("n", "N", "Nzzzv", { desc = "Prev search result" })
 
--- Stay in visual mode when indenting, so you can press > repeatedly.
 map("x", "<", "<gv", { desc = "Outdent" })
 map("x", ">", ">gv", { desc = "Indent" })
 
@@ -98,15 +91,13 @@ map({ "n", "t" }, "<C-\\>", termToggle, { desc = "Toggle terminal" })
 map("n", "<leader>t", termToggle, { desc = "Toggle terminal" })
 
 -- Diagnostics -----------------------------------------------------------------
--- ]d and [d are native since 0.10 and already bound -- not repeated here.
 map("n", "<leader>xx", fzf.diagnostics_document, { desc = "Diagnostics (file)" })
 map("n", "<leader>xX", fzf.diagnostics_workspace, { desc = "Diagnostics (project)" })
 map("n", "<leader>xl", vim.diagnostic.setloclist, { desc = "Diagnostics to location list" })
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line diagnostics (float)" })
 
 -- Code ------------------------------------------------------------------------
--- grn (rename), gra (code action), grr (references), K (hover) are native
--- defaults in 0.11+. These are the extras.
+-- K, grn, gra and grr are native defaults; these are the extras.
 map({ "n", "x" }, "<leader>cf", function()
 	require("conform").format({ async = true, lsp_format = "fallback" })
 end, { desc = "Format buffer" })
@@ -133,7 +124,7 @@ map("n", "<leader>gS", fzf.git_status, { desc = "Git status" })
 map("n", "<leader>gl", fzf.git_commits, { desc = "Git log" })
 map("n", "<leader>gD", "<cmd>CodeDiff<cr>", { desc = "Review working tree (codediff)" })
 map("n", "<leader>gc", function()
-	-- `main...` compares from the merge-base, PR-style; a bare rev diffs head-on
+	-- `main...` is merge-base/PR-style; a bare rev diffs head-on.
 	vim.ui.input({ prompt = "CodeDiff against: ", default = "main..." }, function(rev)
 		if rev and rev ~= "" then
 			vim.cmd("CodeDiff " .. rev)
@@ -154,8 +145,6 @@ map("n", "<leader>ub", function()
 	require("gitsigns").toggle_current_line_blame()
 end, { desc = "Toggle inline git blame" })
 
--- Flip diagnostics between the full message under the cursor line and the
--- compact end-of-line form.
 map("n", "<leader>ud", function()
 	local cfg = vim.diagnostic.config()
 	if cfg.virtual_lines then

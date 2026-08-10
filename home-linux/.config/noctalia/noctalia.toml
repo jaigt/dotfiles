@@ -1,16 +1,13 @@
-# Noctalia v5 trial — hand-managed. GUI/IPC settings write to
-# ~/.local/state/noctalia/settings.toml (loads last, wins); delete that to reset.
-# Design language: Kanagawa glass — frosted panels, CaskaydiaCove, roomy bar.
+# Hand-managed. GUI/IPC settings write to ~/.local/state/noctalia/settings.toml,
+# which loads last and wins; delete that to reset.
 
 [shell]
 font_family = "CaskaydiaCove Nerd Font"
 time_format = "{:%-I:%M %p}"
 
     [shell.panel]
-    # The glass look, everywhere a panel opens
     transparency_mode = "glass"
 
-# Frosted/tinted layer behind open panels — completes the glass effect
 [backdrop]
 enabled = true
 
@@ -20,7 +17,7 @@ scale = 1.15
 background_opacity = 0.88
 start = [ "launcher", "workspaces", "active_window" ]
 center = [ "clock" ]
-# Desktop machine: no battery, no backlight — those widgets dropped
+# Desktop machine: no battery, no backlight.
 end = [
     "media",
     "tray",
@@ -33,8 +30,7 @@ end = [
     "session"
 ]
 
-# Bar clock is a widget instance with its own format (shell.time_format
-# alone doesn't reach it)
+# shell.time_format alone doesn't reach the bar clock widget.
 [widget.clock]
 type = "clock"
 format = "{:%-I:%M %p}"
@@ -42,13 +38,11 @@ format = "{:%-I:%M %p}"
 [widget.network]
 show_label = false
 
-# Dots + wide active pill, only real workspaces shown. No color overrides:
-# the pills follow the active scheme, wallpaper-driven or Kanagawa alike.
+# No colour overrides, so pills follow the active scheme either way.
 [widget.workspaces]
 hide_when_empty = true
 
-# Tray icons tucked into a drawer button; right-click an icon to pin it
-# back into the bar
+# Tray drawer; right-click an icon to pin it back into the bar.
 [widget.tray]
 drawer = true
 drawer_columns = 3
@@ -59,7 +53,7 @@ auto_locate = true
 [control_center]
 sidebar = "full"
 
-# Idle duties taken over from hypridle (same timeouts it had)
+# Idle duties taken over from hypridle.
 [idle]
     [idle.behavior.lock]
     enabled = true
@@ -78,68 +72,58 @@ enabled = true
 directory = "/home/jaigt/Pictures/wallpapers"
 
 [lockscreen]
-# Echo the old hyprlock look: current wallpaper, blurred and dimmed
 blur_intensity = 0.6
 tint_intensity = 0.35
 
 [theme]
 mode = "dark"
-# Trialing wallpaper-driven color (set via color-scheme-set, state file is live).
-# The strict palette stays one command away:
+# Wallpaper-driven colour. Back to the strict palette with:
 #   noctalia msg color-scheme-set custom KanagawaHybrid
 source = "wallpaper"
 custom_palette = "KanagawaHybrid"
 
-    # App theming. Hooks write *through* symlinks (never break them), so the
-    # rule is: anything whose hook would edit a repo-linked config is wired as
-    # a user template below with a colors-only output instead. Outputs land in
-    # machine-local files that per-file symlinking keeps out of the repo.
+    # Hooks write *through* symlinks, so anything whose hook would edit a
+    # repo-linked config is wired as a user template below emitting colours
+    # only, into a machine-local file.
     [theme.templates]
     enable_builtin_templates = true
-    # btop's hook only touches machine-local btop.conf, then SIGUSR2-reloads.
     builtin_ids = ["btop"]
     enable_community_templates = false
 
-    # Wezterm palette as a Lua module; colors.lua prefers it over Kanagawa.
-    # Hook bumps mtime only (content unchanged) so wezterm hot-reloads.
+    # colors.lua prefers this over Kanagawa. The hook bumps mtime only, so
+    # wezterm hot-reloads.
     [theme.templates.user.wezterm]
     input_path = "templates/wezterm-colors.lua"
     output_path = "$XDG_CONFIG_HOME/wezterm/colors-noctalia.lua"
     post_hook = "touch $HOME/.config/wezterm/wezterm.lua"
 
-    # plugins/colorscheme.lua owns the SIGUSR1 handler, so the signal is safe
-    # for every nvim started from this config.
+    # plugins/colorscheme.lua owns the SIGUSR1 handler.
     [theme.templates.user.neovim]
     input_path = "templates/nvim-matugen.lua"
     output_path = "$XDG_CONFIG_HOME/nvim/lua/matugen.lua"
     post_hook = "pkill -USR1 -x nvim || true"
 
-    # Zen: wallpaper primary -> Zen's native accent pref, via user.js. The
-    # community full-restyle CSS fought Zen's own theming; native accent
-    # can't. Applies on next browser start.
+    # Native accent via user.js: the community full-restyle CSS fought Zen's
+    # own theming. Applies on next browser start.
     [theme.templates.user.zen-accent]
     input_path = "templates/zen-accent.txt"
     output_path = "$XDG_CACHE_HOME/noctalia/zen-browser/accent"
     post_hook = "bash $HOME/.config/noctalia/templates/zen-apply.sh"
 
-    # Starship: rendered palette + repo starship.toml merge into a machine-
-    # local ~/.config/starship-noctalia.toml (STARSHIP_CONFIG, set in .zshrc
-    # when the file exists). Starship rereads config every prompt, so open
-    # shells recolor live. The repo toml is only ever read.
+    # Merged into a machine-local starship-noctalia.toml (STARSHIP_CONFIG, set
+    # in .zshrc). Starship rereads every prompt, so open shells recolor live.
     [theme.templates.user.starship]
     input_path = "templates/starship-palette.toml"
     output_path = "$XDG_CACHE_HOME/noctalia/starship-palette.toml"
     post_hook = "bash $HOME/.config/noctalia/templates/starship-apply.sh"
 
-    # Spotify via spicetify's 'text' theme (same theme the Mac uses; user.css
-    # lives in the repo per-OS, the generated color.ini stays machine-local).
+    # user.css lives in the repo; the generated color.ini stays machine-local.
     [theme.templates.user.spicetify]
     input_path = "templates/spicetify-text.ini"
     output_path = "$XDG_CONFIG_HOME/spicetify/Themes/text/color.ini"
     post_hook = "spicetify -q apply --no-restart"
 
-    # Vesktop reads any *.theme.css dropped in its themes dir; enable it once
-    # in Vesktop Settings -> Themes. No hook needed.
+    # Enable once in Vesktop Settings -> Themes. No hook needed.
     [theme.templates.user.vesktop]
     input_path = "templates/vesktop-midnight.css"
     output_path = "$XDG_CONFIG_HOME/vesktop/themes/noctalia.theme.css"

@@ -2,7 +2,7 @@ local colors = require("colors")
 local settings = require("settings")
 
 -- Right-side items are laid out rightmost-first, so that list reads
--- right-to-left on screen: clock at the far right, claude nearest the middle.
+-- right-to-left on screen — first required ends up furthest right.
 local logo      = require("items.logo")
 local front_app = require("items.front_app")
 local git       = require("items.git")
@@ -15,9 +15,8 @@ local wifi      = require("items.wifi")
 local volume    = require("items.volume")
 local claude    = require("items.claude")
 
--- A `bracket` draws one background spanning its members, and members that hide
--- themselves drop out of the span on their own — which is what lets git and
--- claude come and go without leaving a hole.
+-- Members that hide themselves drop out of a bracket's span on their own, so
+-- items can come and go without leaving a hole.
 local pill = {
   drawing = true,
   color = colors.pill_bg,
@@ -31,9 +30,8 @@ sbar.add("bracket", "left_pill", { logo.name, front_app.name, git.name }, {
   background = pill,
 })
 
--- An empty bracket still draws its background — a stray pill floating
--- mid-screen — so media.lua, its only member, hides this bracket by name
--- alongside itself.
+-- An empty bracket still draws its background, so its last member has to hide
+-- this bracket by name alongside itself.
 sbar.add("bracket", "center_pill", { media.name }, {
   background = pill,
 })

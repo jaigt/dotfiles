@@ -1,35 +1,25 @@
--- Rosé Pine graphite, the system theme, plus the three Kanagawa variants kept
--- for the flip-back. `<leader>uc` cycles them live; ACTIVE is what a fresh nvim
--- starts on.
+-- `<leader>uc` cycles variants live; ACTIVE is what a fresh nvim starts on.
 --
--- Transparency is the terminal's job, not nvim's: nvim looks opaque only
--- because it paints its own bg over every cell, so the schemes below turn that
--- painting off. Floats stay opaque on purpose -- transparent floats mean text
--- over text.
+-- Transparency is the terminal's job: nvim looks opaque only because it paints
+-- its own bg over every cell, so that painting is off below. Floats stay
+-- opaque — transparent floats mean text over text.
 
 local ACTIVE = "rose-pine" -- "rose-pine" | "kanagawa-dragon" | "kanagawa-hybrid" | "kanagawa-wave"
 
 --------------------------------------------------------------------------------
 -- Kanagawa
 --------------------------------------------------------------------------------
--- The hybrid is built as WAVE with Dragon's background family grafted on, not
--- the other way round: only 11 ui keys differ between the variants against 19
--- syntax colours, and this leaves Wave's syntax palette inherited from upstream
--- rather than frozen in a table here.
+-- Hybrid is WAVE with Dragon's backgrounds grafted on, not the reverse: far
+-- fewer ui keys differ than syntax colours, so Wave's syntax palette stays
+-- inherited rather than frozen in a table here.
 --
--- Both tables have to be spelled out because kanagawa.setup() does
--- `M.config = tbl_deep_extend("force", M.config, opts)` -- it ACCUMULATES across
--- calls rather than replacing. Once hybrid grafts Dragon's backgrounds onto the
--- wave theme, simply omitting the override on the next call leaves the graft in
--- place, so cycling to plain Wave would silently keep Dragon's backgrounds.
+-- kanagawa.setup() ACCUMULATES (tbl_deep_extend on each call), so both tables
+-- must be spelled out — omitting an override does not undo it, and cycling
+-- back to Wave would silently keep Dragon's backgrounds.
 --
--- `fg` is deliberately NOT in either table -- it is a foreground, so the hybrid
--- keeps Wave's #DCD7BA.
---
--- `bg_gutter` is deliberately absent too, even though it differs between the
--- variants. kanagawa merges the theme-specific override OVER the "all" one, so
--- listing it here would beat the bg_gutter = "none" set below and paint the
--- opaque stripe back down the left edge under transparency.
+-- `fg` is absent on purpose so the hybrid keeps Wave's foreground. `bg_gutter`
+-- too: theme overrides beat the "all" one, so listing it here would defeat the
+-- bg_gutter = "none" below and repaint the opaque stripe.
 local DRAGON_UI = {
   bg = "#181616",
   bg_dim = "#12120f",
@@ -41,9 +31,8 @@ local DRAGON_UI = {
   nontext = "#625e5a",
   special = "#7a8382",
   whitespace = "#625e5a",
-  -- nested, and easy to miss: FloatFooter and the mini.* title/prompt groups
-  -- read ui.float.bg directly rather than ui.bg_*, so leaving these out left
-  -- four groups still painting Wave's #16161D
+  -- Easy to miss: FloatFooter and the mini.* title/prompt groups read
+  -- ui.float.bg directly, not ui.bg_*, so omitting these leaves them opaque.
   float = { bg = "#0d0c0c", bg_border = "#0d0c0c" },
 }
 
@@ -61,13 +50,11 @@ local WAVE_UI = {
   float = { bg = "#16161D", bg_border = "#16161D" },
 }
 
--- `variant` is one of "dragon" | "hybrid" | "wave". Plain Dragon needs no
--- overrides -- it is the untouched upstream theme.
+-- Plain Dragon needs no overrides; it is the untouched upstream theme.
 local function setup_kanagawa(variant)
   local base = (variant == "dragon") and "dragon" or "wave"
 
-  -- With transparent = true, Kanagawa still paints the gutter, which leaves a
-  -- visible opaque stripe down the left edge. "none" clears it.
+  -- Kanagawa still paints the gutter under transparent = true.
   local theme_overrides = { all = { ui = { bg_gutter = "none" } } }
 
   if variant == "hybrid" then
@@ -83,17 +70,14 @@ local function setup_kanagawa(variant)
     transparent = true,
     colors = { theme = theme_overrides },
 
-    -- Kanagawa clears every background under `transparent`, floats included, so
-    -- the surfaces that must stay opaque get painted back by hand here.
-    -- bg_p1 is one step UP from the background. (Careful with the names --
-    -- Kanagawa's bg_m1 is *lighter* than bg in Dragon.)
+    -- `transparent` clears floats too, so opaque surfaces are painted back by
+    -- hand. Careful: Kanagawa's bg_m1 is *lighter* than bg in Dragon.
     overrides = function(colors)
       local theme = colors.theme
       return {
         NormalFloat = { bg = theme.ui.bg_p1 },
         FloatBorder = { bg = theme.ui.bg_p1, fg = theme.ui.nontext },
         FloatTitle = { bg = theme.ui.bg_p1, fg = theme.ui.fg },
-        -- The completion menu (blink.cmp) and which-key ride on Pmenu.
         Pmenu = { bg = theme.ui.bg_p1 },
         PmenuSel = { bg = theme.ui.bg_p2 },
       }
@@ -106,9 +90,8 @@ end
 --------------------------------------------------------------------------------
 local function setup_rose_pine()
   require("rose-pine").setup({
-    -- Pinned explicitly. The default is "auto", which follows
-    -- `vim.o.background` and would flip to the light Dawn variant if anything
-    -- ever set background=light.
+    -- Pinned: the default "auto" follows `vim.o.background` and would flip to
+    -- the light Dawn variant.
     variant = "main",
     dark_variant = "main",
 
@@ -116,11 +99,9 @@ local function setup_rose_pine()
       transparency = true,
     },
 
-    -- "Graphite": the upstream background ramp (hue ~248, sat 13-25%) fully
-    -- desaturated, same lightness -- de-purples the shell without touching
-    -- contrast. Foregrounds stay stock. The highlight_groups below resolve
-    -- these names, so floats and selection pick the graphite values up
-    -- automatically.
+    -- "Graphite": upstream's background ramp fully desaturated at the same
+    -- lightness. The highlight_groups below resolve these names, so floats
+    -- and selection pick the values up automatically.
     palette = {
       main = {
         _nc = "#1a1a1a",
@@ -133,14 +114,11 @@ local function setup_rose_pine()
       },
     },
 
-    -- `transparency = true` clears every background, floats included, so the
-    -- surfaces that must stay opaque get painted back by hand. `surface` is one
-    -- step up from the background.
+    -- `transparency = true` clears floats too; opaque surfaces painted back.
     highlight_groups = {
       NormalFloat = { bg = "surface" },
       FloatBorder = { bg = "surface", fg = "highlight_high" },
       FloatTitle = { bg = "surface", fg = "text" },
-      -- The completion menu (blink.cmp) and which-key ride on Pmenu.
       Pmenu = { bg = "surface" },
       PmenuSel = { bg = "highlight_med" },
     },
@@ -172,21 +150,17 @@ local COLORSCHEME_CMD = {
   ["kanagawa-wave"] = "kanagawa-wave",
 }
 
--- The current scheme is tracked here rather than read back from
--- `vim.g.colors_name`, because kanagawa sets that to plain "kanagawa" for every
--- variant -- cycling off it would never distinguish dragon from wave and would
--- stick on the first one.
+-- Tracked here, not read off `vim.g.colors_name`: kanagawa sets that to plain
+-- "kanagawa" for every variant, so cycling off it would stick on the first.
 local current = ACTIVE
 
--- lualine is configured in ui.lua, which loads after this file, so the restyle
--- is guarded on a cold start. The new theme has to be merged into the
--- *existing* config -- lualine.setup() replaces wholesale, so passing only
--- `options` would wipe the custom sections ui.lua defines.
+-- ui.lua loads after this file, hence the cold-start guard. Merge into the
+-- existing config: lualine.setup() replaces wholesale, so passing `options`
+-- alone would wipe ui.lua's custom sections.
 local function apply(name)
   current = name
-  -- Kanagawa has to be re-set up before the colorscheme call, not after: the
-  -- variant (and, for the hybrid, the grafted palette) is baked in at setup
-  -- time, and `:colorscheme` only re-renders whatever setup last produced.
+  -- setup() before :colorscheme, not after: the variant is baked in at setup
+  -- time and :colorscheme only re-renders what setup last produced.
   local variant = KANAGAWA_VARIANT[name]
   if variant then
     setup_kanagawa(variant)
@@ -215,8 +189,7 @@ vim.keymap.set("n", "<leader>uc", function()
   apply(SCHEMES[(i % #SCHEMES) + 1])
 end, { desc = "Cycle colorscheme" })
 
--- Exposed so ui.lua can theme lualine to match ACTIVE without duplicating the
--- mapping.
+-- Exposed so ui.lua can match ACTIVE without duplicating the mapping.
 vim.g.lualine_theme = LUALINE_THEME[ACTIVE]
 
 if KANAGAWA_VARIANT[ACTIVE] then

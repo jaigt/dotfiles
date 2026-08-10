@@ -1,63 +1,30 @@
 #!/usr/bin/env python3
-"""Generate "Rosé Pine Glass" — Rosé Pine's foregrounds on a graphite background
-ramp, with Transparent Prism's translucency.
+"""Generate "Rosé Pine Glass" from `theme-base.json` and the palette below.
 
-SELF-CONTAINED: the only inputs are `theme-base.json`, committed next to this
-script, and the palette below. No installed theme extension is read.
+SELF-CONTAINED: the only inputs are the committed template and this palette. No
+installed theme extension is read.
 
-`themes/kanagawa-glass.json` is frozen output of this script's previous Kanagawa
-palette: flipping back means selecting it in settings.json, and regenerating it
-would mean restoring the old PALETTE from git history.
+`themes/kanagawa-glass.json` is frozen output of a previous palette; flipping
+back means selecting it in settings.json, not regenerating.
 
-HOW IT WORKS
-------------
-`theme-base.json` carries Zed's full style key set with every value written as a
-palette TOKEN rather than a colour:
+`theme-base.json` writes every Zed style value as a `$TOKEN`, which main()
+resolves against the constants below — so retheming never touches the template.
 
-    "editor.background":        "$BG"
-    "background":               "$BG+d0"        <- +alpha suffix
-    "terminal.ansi.green":      "$GREEN"
-    "syntax": { "string": { "color": "$GREEN2", ... } }
+TOKEN NAMES ARE ROLE SLOTS, NOT HUES. They came from Kanagawa, and Rosé Pine
+assigns its hues to roles differently: `$GREEN2` is the string slot (gold),
+`$VIOLET` the keyword slot (pine), `$BLUE` the function slot (rose). The
+exception is the terminal ANSI block, where the names really are hues and the
+role reading gives nonsense — so ansi() reasserts Rosé Pine's mapping after
+resolution.
 
-main() resolves each `$NAME` against the constants below and applies the glass
-structure. Retheming the editor is therefore a matter of editing the palette
-here — the template never has to change.
+Translucency is a structure, not a setting: `background.appearance = "blurred"`
+turns on macOS vibrancy (without it the alphas composite against an opaque
+window), reading surfaces go fully transparent, chrome keeps a tint so text
+stays legible, and highlights that assumed a solid backdrop become low-alpha
+washes.
 
-TOKEN NAMES ARE ROLE SLOTS, NOT HUES
-------------------------------------
-The token names came from Kanagawa, where they happened to be hue names. Rosé
-Pine has six hues, not nine, and assigns them to roles differently, so under
-this palette a token means "whatever the template uses it for", not its name:
-`$GREEN2` is the string slot (gold), `$VIOLET` is the keyword slot (pine),
-`$BLUE` is the function slot (rose). The comment on each entry names the role.
-
-One place the hue names really were hues is the terminal ANSI block, and there
-the role reading gives nonsense (yellow → grey, blue → pink). So ansi() reasserts
-Rosé Pine's own terminal mapping over those keys after resolution.
-
-REFRESHING FOR A NEW ZED VERSION
---------------------------------
-If Zed adds style keys, this will still build — it just won't set the new ones,
-and Zed falls back to its defaults. To pick them up: install any theme extension,
-diff its `style` keys against `theme-base.json`, and add the missing ones with
-whichever `$TOKEN` fits. Rare, and a two-minute job.
-
-TRANSLUCENCY
-------------
-Transparent Prism's translucency isn't a single setting — it's a structure:
-
-  1. `background.appearance = "blurred"` turns on macOS vibrancy. This is the
-     part that actually makes the window see-through; without it the alphas
-     below just composite against an opaque window.
-  2. The big reading surfaces — editor, gutter, panels, tab bar, terminal —
-     go to #00000000, fully transparent, so the desktop shows through.
-  3. The chrome around them — window bg, title bar, status bar, popovers —
-     takes a dark tint at alpha d0 (~82%), so text on it stays legible.
-  4. Highlights that used to rely on a solid background (active tab, active
-     line) become low-alpha washes.
-
-Regenerating overwrites the output. Run `./install.sh` afterwards to symlink it
-into ~/.config/zed/themes/ if it isn't linked yet.
+If Zed adds style keys this still builds; it just won't set them. To pick them
+up, diff any theme extension's `style` keys against `theme-base.json`.
 """
 import json
 import os

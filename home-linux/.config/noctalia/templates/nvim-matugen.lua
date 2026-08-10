@@ -1,8 +1,6 @@
 -- Noctalia template -> ~/.config/nvim/lua/matugen.lua
--- Adapted from noctalia-dev/community-templates (neovim): base16 mapping only.
--- The SIGUSR1 reload handler lives in plugins/colorscheme.lua, not here, so
--- every nvim registers it at startup -- a stray SIGUSR1 would otherwise kill
--- any nvim that never required this module.
+-- The SIGUSR1 handler lives in plugins/colorscheme.lua, not here: a stray
+-- SIGUSR1 would kill any nvim that never required this module.
 local M = {}
 
 function M.setup()

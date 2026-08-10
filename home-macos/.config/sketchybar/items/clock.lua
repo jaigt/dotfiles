@@ -20,13 +20,11 @@ local clock = sbar.add("item", "clock", {
   popup = { align = "right" },
 })
 
--- A label is strictly single-line — newlines are swallowed — so each row of the
--- `cal` grid needs its own item. Eight covers the worst case: month heading,
+-- Labels are single-line, so every `cal` row needs its own item: month heading,
 -- weekday heading, six week rows.
 --
--- The explicit width is required, not cosmetic: left to size itself, sketchybar
--- under-measures any label beginning with spaces and clips the tail (the
--- centred heading came out as "July 2"). 20 columns at ~7.2pt plus 28pt padding.
+-- The explicit width is required: sketchybar under-measures a label starting
+-- with spaces and clips its tail.
 local CAL_ROWS = 8
 local cal = {}
 for i = 1, CAL_ROWS do
@@ -35,7 +33,6 @@ for i = 1, CAL_ROWS do
     icon = { drawing = false },
     label = {
       string = "",
-      -- Mono, or the columns won't line up.
       font = {
         family = settings.mono,
         style = i == 1 and "Bold" or "Regular",
@@ -60,11 +57,9 @@ end
 clock:subscribe({ "routine", "forced" }, update_clock)
 
 clock:subscribe("mouse.clicked", function()
-  -- col -b flattens `cal`'s backspace-overstrike "today" marker, which renders
-  -- as garbage in a label; `expand` because `cal` indents some week rows with
-  -- literal tabs, and a tab inside a label has no defined width.
-  --
-  -- [==[ ]==] because "[[:space:]]" below would otherwise close a plain [[ ]].
+  -- col -b flattens `cal`'s overstrike "today" marker, which renders as
+  -- garbage; `expand` because a tab in a label has no defined width.
+  -- [==[ ]==] because "[[:space:]]" would close a plain [[ ]].
   sbar.exec([==[sh -c "cal | col -b | expand | sed '/^[[:space:]]*$/d'"]==], function(out)
     local i = 1
     for line in (out or ""):gmatch("[^\n]+") do
@@ -84,7 +79,6 @@ clock:subscribe("mouse.exited.global", function()
   clock:set({ popup = { drawing = false } })
 end)
 
--- Populate once at load: there is no sbar.update() to force a first tick.
 update_clock()
 
 return clock

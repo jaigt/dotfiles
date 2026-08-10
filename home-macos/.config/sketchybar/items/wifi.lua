@@ -2,15 +2,9 @@ local colors = require("colors")
 local icons = require("icons")
 local settings = require("settings")
 
--- There is no SSID here, and that is not a bug. Current macOS withholds the
--- network name from any process without Location Services authorisation —
--- `ipconfig getsummary en0` returns "<redacted>" for SSID, BSSID *and*
--- NetworkID. That is granted to applications; sketchybar is a launchd-run CLI
--- binary that never requests it, so there is no route to the name short of
--- `sudo wdutil info`. (`networksetup -getairportnetwork` reports "not
--- associated" even when online, and `airport` was removed in Sonoma.)
---
--- It polls because wifi_change has not fired since Sonoma.
+-- No SSID on purpose: macOS redacts it without Location Services auth, which
+-- a launchd-run CLI can't request. There is no route to the name.
+-- Polls because wifi_change stopped firing in Sonoma.
 
 local wifi = sbar.add("item", "wifi", {
   position = "right",
@@ -83,7 +77,6 @@ wifi:subscribe("mouse.exited.global", function()
   wifi:set({ popup = { drawing = false } })
 end)
 
--- Populate once at load: there is no sbar.update() to force a first tick.
 update()
 
 return wifi

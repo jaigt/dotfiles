@@ -4,10 +4,8 @@
 # home-macos/ and home-linux/ hold OS-specific configs; the tree matching
 # `uname` is linked alongside home/.
 #
-# Linking happens per *file*, not per directory. That matters because ~/.claude
-# and ~/.config are shared with a lot of machine-local state (caches, session
-# logs, credentials) that must not end up in this repo — symlinking the whole
-# directory would drag it all in.
+# Per *file*, not per directory: ~/.claude and ~/.config are full of
+# machine-local state (caches, logs, credentials) that must not enter the repo.
 #
 #   ./install.sh            apply
 #   ./install.sh --dry      show what would happen, change nothing
@@ -51,8 +49,8 @@ while (( $# )); do
   shift
 done
 
-# --dry is a modifier, not a mode, so that it composes with --adopt. The plain
-# install path still reads MODE=dry, which is what link() has always keyed on.
+# A modifier, not a mode, so it composes with --adopt — but the plain install
+# path still reads MODE=dry, which link() keys on.
 if (( DRY )) && [[ $MODE == apply ]]; then MODE=dry; fi
 
 if [[ $MODE != adopt ]] && (( ${#ADOPT_PATHS[@]} > 0 )); then
@@ -78,14 +76,12 @@ say() { printf '%s\n' "$*"; }
 link() {
   local src="$1" rel="$2" dest="$HOME/$2"
 
-  # Already pointing where we want it.
   if [[ -L "$dest" && "$(readlink "$dest")" == "$src" ]]; then
     say "  ${dim}ok${reset}      $rel"
     skipped=$((skipped + 1))
     return
   fi
 
-  # Something real is in the way — move it aside rather than clobber it.
   if [[ -e "$dest" || -L "$dest" ]]; then
     say "  ${yellow}backup${reset}  $rel ${dim}-> ${BACKUP#$HOME/}/$rel${reset}"
     if [[ $MODE == apply ]]; then
@@ -103,10 +99,9 @@ link() {
   linked=$((linked + 1))
 }
 
-# Report only what's broken. A file can detach silently: apps that save settings
-# atomically (write temp, rename over target) replace the symlink with a regular
-# file. `git status` stays clean when that happens — the repo's copy genuinely
-# wasn't touched — so this is the only way to notice.
+# A file can detach silently: apps that save atomically (write temp, rename over
+# target) replace the symlink with a regular file, and `git status` stays clean
+# because the repo's copy genuinely wasn't touched.
 check() {
   local src="$1" rel="$2" dest="$HOME/$2"
 
@@ -126,8 +121,7 @@ check() {
     return
   fi
 
-  # A real file sits where the symlink should be. Whether its content has
-  # drifted decides the fix: copy it back first, or just re-link.
+  # Whether the content drifted decides the fix: copy back first, or re-link.
   if cmp -s "$dest" "$src"; then
     say "  ${yellow}detached${reset}  $rel ${dim}(same content — safe to re-link)${reset}"
   else
@@ -140,8 +134,7 @@ check() {
 # Links can also break from the other direction: rename or delete a file in the
 # repo and the link in $HOME is left pointing at nothing. Neither loop above can
 # see that — both are driven by what's *in* the repo, so a link with no
-# counterpart there is invisible to them. That's how ~/.config/fastfetch/
-# wings.txt outlived its rename to luffy.txt. Walk the destinations instead and
+# counterpart there is invisible to them. Walk the destinations instead and
 # flag any link that aims into this repo and resolves to nothing.
 find_orphans() {
   local base dir rel dest entry target
@@ -161,12 +154,9 @@ find_orphans() {
   done
 }
 
-# Take a live file into the repo: move it to the mirrored path, then link it
-# straight back. The order matters and so does the *move*. Copying instead
-# leaves two independent files — the repo's and the live one — and nothing
-# notices when they drift, because git status is clean either way; --check only
-# catches it later, once you've forgotten which side is authoritative. After a
-# move there is no second copy to drift from.
+# --adopt, below. It MOVES a live file into the repo and links it back; copying
+# instead would leave two independent files that nothing notices drifting,
+# because git status is clean either way.
 cred_hit() {
   grep -nEIi -m1 \
     -e 'sk-[A-Za-z0-9_-]{20,}' \
@@ -181,9 +171,8 @@ cred_hit() {
 
 refuse() { say "  ${red}skip${reset}      $1 ${dim}($2)${reset}"; adopt_skipped=$((adopt_skipped + 1)); }
 
-# $2 is "dir" when we're walking a directory rather than acting on a path the
-# user named. Inside a directory, a gitignored file is expected — settings sit
-# next to logs and caches all the time — so it's a quiet pass, not a complaint.
+# $2 is "dir" when walking a directory rather than a path the user named.
+# A gitignored file inside a directory is expected, so it passes quietly.
 adopt_one() {
   local abs="$1" from="${2:-arg}" rel reldest dest rule hit
 
@@ -205,8 +194,7 @@ adopt_one() {
   [[ -f "$abs" ]] || { refuse "$rel" "not a regular file"; return; }
   [[ -e "$dest" ]] && { refuse "$rel" "already in the repo at $reldest"; return; }
 
-  # Untracked files are never linked, so adopting into an ignored path would
-  # silently produce nothing. Say so instead.
+  # Untracked files are never linked, so this would silently produce nothing.
   if rule=$(git -C "$REPO" check-ignore -v -- "$reldest" 2>/dev/null); then
     if [[ $from == dir ]]; then
       say "  ${dim}ignored   $rel${reset}"
@@ -282,12 +270,9 @@ case $MODE in
 esac
 say ""
 
-# What gets linked is decided by git, not by walking the filesystem. `ls-files`
-# reports exactly the tracked set, so anything .gitignore already rejects —
-# __pycache__/*.pyc left behind by the generator scripts, machine-local state,
-# .DS_Store — never gets dragged into $HOME. Walking home/ instead would link
-# it all, and then --check would spend the rest of its life reporting the junk
-# as "missing".
+# git decides what gets linked, not a filesystem walk: `ls-files` is exactly the
+# tracked set, so anything .gitignore rejects never reaches $HOME. Walking home/
+# would link the junk and then --check would report it missing forever.
 declare -a files=() rels=()
 for tree in home ${OS_TREE:+"$OS_TREE"}; do
   while IFS= read -r -d '' rel; do

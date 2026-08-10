@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
-# Feed the wallpaper primary into Zen's native accent (zen.theme.accent-color)
-# via user.js, and strip the @imports the retired full-restyle template once
-# added. Native theming means no fights with Zen's own appearance settings;
-# user.js re-pins the accent on every browser start.
+# Wallpaper primary -> Zen's native accent via user.js, which re-pins it on
+# every browser start. Also strips @imports left by the retired restyle
+# template.
 set -euo pipefail
 
 cache_dir="${XDG_CACHE_HOME:-$HOME/.cache}"
@@ -22,15 +21,14 @@ replace_if_changed() {
     rm -f "$tmp"
 }
 
-# Missing roots (~/.zen here) make find exit nonzero after streaming results;
-# don't let pipefail turn that into a hook failure.
+# A missing root makes find exit nonzero after streaming results; don't let
+# pipefail turn that into a hook failure.
 { find "${XDG_CONFIG_HOME:-$HOME/.config}/zen" "$HOME/.zen" \
     -mindepth 2 -maxdepth 2 -type f -name "prefs.js" -print0 2>/dev/null || true; } |
     while IFS= read -r -d '' prefs_file; do
         profile_dir=$(dirname "$prefs_file")
         user_js="$profile_dir/user.js"
 
-        # Retire the old wiring: drop our @import lines; empty leftovers vanish.
         for css in "$profile_dir/chrome/userChrome.css" "$profile_dir/chrome/userContent.css"; do
             [ -f "$css" ] || continue
             tmp="$(mktemp "${css}.tmp.XXXXXX")"

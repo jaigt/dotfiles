@@ -2,8 +2,6 @@ local colors = require("colors")
 local icons = require("icons")
 local settings = require("settings")
 
--- Event-driven, no polling: volume_change still fires reliably. Scroll to
--- adjust, click to mute.
 
 local volume = sbar.add("item", "volume", {
   position = "right",
@@ -37,7 +35,6 @@ local function render(vol, muted)
   })
 end
 
--- volume_change hands the new level straight to the callback — no shell-out.
 volume:subscribe("volume_change", function(env)
   local vol = tonumber(env.INFO)
   if vol then render(vol, vol == 0) end
@@ -62,7 +59,7 @@ end)
 volume:subscribe("mouse.scrolled", function(env)
   local delta = tonumber(env.SCROLL_DELTA) or 0
   if delta == 0 then return end
-  -- Scroll deltas are small and can be fractional, so scale up and clamp.
+  -- Scroll deltas are small and can be fractional; scale up before rounding.
   local step = math.floor(delta * 3 + 0.5)
   sbar.exec([[osascript -e 'set v to output volume of (get volume settings)' ]]
     .. [[-e 'set n to v + (]] .. step .. [[)' ]]

@@ -1,12 +1,9 @@
 local colors = require("colors")
 local settings = require("settings")
 
--- The focused application, with its real macOS icon via sketchybar's built-in
--- `app.<bundle-id>` image source.
---
--- The image is a *background* property, so this item can't take the global
--- background.drawing = false that leaves pill-drawing to the brackets — that
--- would take the icon with it. It draws a fully transparent background instead.
+-- The icon is a *background* property, so this item can't take the global
+-- background.drawing = false — that would take the icon with it. Hence the
+-- transparent background.
 
 local front_app = sbar.add("item", "front_app", {
   position = "left",
@@ -26,22 +23,13 @@ local front_app = sbar.add("item", "front_app", {
   },
 })
 
--- Match on bundle id, not name: System Events reports the *process* name —
--- WezTerm's is "wezterm-gui", which sketchybar can't resolve to an app icon.
+-- Bundle id, not name: the process name ("wezterm-gui") won't resolve to an
+-- icon. Unresolvable ids — briefly-focused background agents — make sketchybar
+-- keep the *previous* icon and log a line per attempt, so the id is only
+-- emitted when mdfind can name a bundle for it. mdfind failing outright
+-- (empty, not "0") counts as resolvable, so indexing-off machines keep icons.
 --
--- Not every bundle id can be turned into an icon: background agents like
--- com.apple.LocalAuthentication.UIAgent take focus briefly and `app.<id>` can't
--- resolve them. sketchybar answers that by logging "Invalid application name"
--- and *keeping the bitmap it already had*, so the previous app's icon sits next
--- to the new app's name until something resolvable comes along — and the log
--- fills up at one line per attempt.
---
--- So the id is only emitted when Spotlight can name a bundle for it, which is
--- the same question `app.<id>` asks. mdfind failing outright (empty, not "0")
--- counts as resolvable, so a machine with indexing off keeps its icons.
---
--- No `sh -c '...'` wrapper: sbar.exec's popen() is already /bin/sh -c, and the
--- second level only forced the sed and mdfind quoting to be escaped twice.
+-- No `sh -c` wrapper: sbar.exec's popen() is already /bin/sh -c.
 local function update(env)
   sbar.exec([[asn=$(lsappinfo front); ]]
     .. [[lsappinfo info -only name "$asn" | head -1 | sed -n 's/^"\([^"]*\)".*/\1/p'; ]]
@@ -53,8 +41,6 @@ local function update(env)
     function(out)
       local lines = {}
       for line in out:gmatch("[^\n]+") do lines[#lines + 1] = line end
-      -- env.INFO carries the app name on front_app_switched, and is empty on
-      -- the initial forced update.
       local name = (env and env.INFO ~= "" and env.INFO) or lines[1]
       local bundle = lines[2]
       if not name then return end
@@ -65,8 +51,8 @@ local function update(env)
           background = { image = { string = "app." .. bundle, drawing = true } },
         })
       else
-        -- image.drawing = false is what actually clears the old icon; assigning
-        -- an unresolvable string would leave it drawn.
+        -- Only drawing = false clears the old icon; an unresolvable string
+        -- leaves it drawn.
         front_app:set({
           label = { string = name, padding_left = 10 },
           background = { image = { drawing = false } },

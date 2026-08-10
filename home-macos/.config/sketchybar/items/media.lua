@@ -2,15 +2,11 @@ local colors = require("colors")
 local icons = require("icons")
 local settings = require("settings")
 
--- Now playing.
+-- Sketchybar's `media_change` is dead on macOS 26 (MediaRemote locked down),
+-- hence Spotify's own distributed notification instead.
 --
--- Sketchybar's own `media_change` event is deprecated as of macOS 26 (Apple
--- locked down the MediaRemote framework it relied on), so this listens for the
--- distributed notification Spotify posts instead — Spotify only, but genuinely
--- event-driven and still working.
---
--- Sole member of center_pill: every place that changes this item's visibility
--- must change the bracket's too, or an empty bracket draws a stray pill.
+-- Sole member of center_pill: change this item's visibility and you must change
+-- the bracket's too, or an empty bracket draws a stray pill.
 
 sbar.add("event", "spotify_change", "com.spotify.client.PlaybackStateChanged")
 
@@ -34,18 +30,9 @@ local media = sbar.add("item", "media", {
   updates = "on",
 })
 
--- Sending Spotify *any* Apple Event while it is quitting brings it back from
--- the dead, and the AppleScript `is running` guard is not sufficient on its
--- own: quitting posts a PlaybackStateChanged notification *and* moves focus, so
--- this runs inside the ~150ms teardown window while `is running` is still true.
--- Measured: Cmd-Q at t=0.02s, gone at 0.15s, relaunched by this item at 0.27s.
---
--- Hence the two guards in front of the AppleScript, both of which matter:
---   sleep  lets a quit finish before Spotify is touched at all.
---   pgrep  a POSIX liveness check that sends no Apple Event, so unlike
---          `is running` it cannot itself relaunch anything.
---
--- Do not collapse this into a bare tell block, and do not drop the sleep.
+-- Any Apple Event sent to Spotify mid-quit relaunches it, and quitting fires
+-- this very notification while `is running` is still true. The sleep waits the
+-- teardown out; pgrep re-checks without sending an event. Drop neither.
 local QUERY = "sleep 1; pgrep -x Spotify >/dev/null 2>&1 || { echo notrunning; exit 0; }; "
   .. [[osascript -e 'if application id "com.spotify.client" is running then' ]]
   .. [[-e 'tell application id "com.spotify.client"' ]]
@@ -95,8 +82,8 @@ local function update()
   end)
 end
 
--- front_app_switched is a safety net: nothing is posted when Spotify quits, so
--- without it the item would sit there showing a stale track forever.
+-- Spotify posts nothing on quit, so front_app_switched is what clears a
+-- stale track.
 media:subscribe({ "spotify_change", "front_app_switched", "forced" }, update)
 
 media:subscribe("mouse.clicked", function()
@@ -105,7 +92,6 @@ media:subscribe("mouse.clicked", function()
     function() update() end)
 end)
 
--- Populate once at load: there is no sbar.update() to force a first tick.
 update()
 
 return media

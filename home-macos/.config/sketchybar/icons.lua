@@ -1,10 +1,6 @@
--- All from the nf-md (Material Design, U+F0xxx) range of CaskaydiaCove. The
--- nf-fa and nf-oct cpu/memory glyphs, the Devicons branch glyph, the
--- FontAwesome clock and U+F8FF (the Apple logo) are *absent* from this font,
--- and a missing glyph renders as an invisible blank rather than a box — so it
--- looks like a layout bug, not a font problem. Before adding one, check the
--- font really has it (fonttools against
--- ~/Library/Fonts/CaskaydiaCoveNerdFont-Regular.ttf).
+-- nf-md range only. CaskaydiaCove is missing chunks of the other Nerd Font
+-- ranges, and a missing glyph renders as an invisible blank, not a box — it
+-- reads as a layout bug. Check the font really has one before adding it.
 
 return {
   logo = "󰀵",

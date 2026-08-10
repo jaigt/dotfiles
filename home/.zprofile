@@ -4,7 +4,7 @@
 # Hermes Agent — ensure ~/.local/bin is on PATH
 export PATH="$HOME/.local/bin:$PATH"
 
-# Set in .zprofile rather than .zshrc so non-interactive children inherit it
-# too. Must come after brew shellenv — nvim lives in the Homebrew prefix.
+# Here, not .zshrc, so non-interactive children inherit it. After brew shellenv:
+# nvim lives in the Homebrew prefix.
 export EDITOR="nvim"
 export VISUAL="nvim"

@@ -1,9 +1,8 @@
 -- Terminal palettes. Flip ACTIVE and save -- WezTerm hot-reloads the config.
 --
--- Do NOT use WezTerm's built-in 'Kanagawa Dragon (Gogh)' scheme. It is
--- mislabelled: its background is #1f1f28 and its foreground #ddd8bb, which are
--- Wave's values, not Dragon's (#181616 / #c5c9c5), and the ANSI row is Wave's.
--- Everything below comes from rebelot/kanagawa.nvim's own `term` table.
+-- Do NOT use WezTerm's built-in 'Kanagawa Dragon (Gogh)': it is mislabelled,
+-- carrying Wave's background, foreground and ANSI row. Everything below comes
+-- from rebelot/kanagawa.nvim's own `term` table.
 
 local ACTIVE = 'rose-pine' -- 'rose-pine' | 'kanagawa-dragon' | 'kanagawa-hybrid' | 'kanagawa-wave'
 
@@ -12,23 +11,15 @@ local palettes = {}
 --------------------------------------------------------------------------------
 -- Rosé Pine (main) -- the system theme.
 --------------------------------------------------------------------------------
--- Verbatim from rose-pine/alacritty -> dist/rose-pine.toml. There's no
--- rose-pine/wezterm port, and WezTerm's built-in `rose-pine` scheme (Gogh's)
--- swaps the green and blue slots, so the Alacritty dist is the source here.
+-- From rose-pine/alacritty; there's no wezterm port, and WezTerm's built-in
+-- `rose-pine` (Gogh's) swaps the green and blue slots.
 --
--- Note how the ANSI slots map -- upstream deliberately does NOT keep the hue
--- names aligned with the slot names, because Rosé Pine has no true green and
--- no true cyan:
+-- Upstream deliberately does NOT align hue names with slot names — Rosé Pine
+-- has no true green or cyan, so the green slot holds a blue-teal, blue holds a
+-- pale cyan, cyan holds a warm pink. `ls` dirs come out teal and diff additions
+-- blue on purpose. Don't "fix" it.
 --
---   green slot   -> pine (#31748f, a blue-teal)
---   blue slot    -> foam (#9ccfd8, pale cyan)
---   cyan slot    -> rose (#ebbcba, warm pink)
---
--- So `ls` directories come out teal and `git diff` additions come out blue.
--- That's the intended Rosé Pine look, not a mistake -- don't "fix" it.
--- The background family here is "graphite": upstream's ramp fully desaturated,
--- same lightness (base #191724 -> #1e1e1e etc.), matching the nvim palette
--- override. Foregrounds and the colour rows are stock Rosé Pine.
+-- Backgrounds are "graphite": upstream's ramp desaturated at equal lightness.
 palettes['rose-pine'] = {
   foreground = '#e0def4', -- text
   background = '#1e1e1e', -- base (graphite)
@@ -53,10 +44,8 @@ palettes['rose-pine'] = {
     '#ebbcba', -- cyan    / rose
     '#e0def4', -- white   / text
   },
-  -- Rosé Pine's bright row is identical to the normal row apart from black,
-  -- which steps overlay -> muted. Upstream does this on purpose: the palette
-  -- has one tone per hue, so a synthesised brighter row would have to invent
-  -- colours that aren't in the theme.
+  -- Only black brightens: the palette has one tone per hue, so a synthesised
+  -- bright row would invent colours that aren't in the theme.
   brights = {
     '#6e6a86', -- muted
     '#eb6f92',
@@ -81,9 +70,9 @@ palettes['rose-pine'] = {
 --------------------------------------------------------------------------------
 -- Kanagawa Dragon -- the muted, warm-charcoal variant.
 --------------------------------------------------------------------------------
--- Upstream reuses Wave's colours for Dragon's bright row. Note bright-black is
--- #a6a69c, light enough that "dimmed" CLI output reads nearly as bright as body
--- text; #625e5a (dragonBlack6) is the fix if that bothers you.
+-- Upstream reuses Wave's colours for Dragon's bright row, so bright-black is
+-- light enough that "dimmed" output reads nearly as bright as body text.
+-- dragonBlack6 (#625e5a) is the fix if that bothers you.
 palettes['kanagawa-dragon'] = {
   foreground = '#c5c9c5', -- dragonWhite
   background = '#181616', -- dragonBlack3
@@ -132,8 +121,7 @@ palettes['kanagawa-dragon'] = {
 --------------------------------------------------------------------------------
 -- Kanagawa Hybrid -- Dragon's shell, Wave's colours.
 --------------------------------------------------------------------------------
--- Dragon's background, cursor, selection and tab bar, carrying Wave's ANSI rows
--- and foreground. Hand-mixed; not an upstream variant.
+-- Hand-mixed, not an upstream variant.
 palettes['kanagawa-hybrid'] = {
   foreground = '#DCD7BA', -- Wave's fujiWhite
   background = '#181616', -- Dragon's dragonBlack3
@@ -148,7 +136,6 @@ palettes['kanagawa-hybrid'] = {
   scrollbar_thumb = '#282727', -- Dragon's bg_p1
   split = '#282727',
 
-  -- Wave's rows wholesale.
   ansi = {
     '#16161D',
     '#C34043',
@@ -228,8 +215,7 @@ palettes['kanagawa-wave'] = {
   },
 }
 
--- Returned as a plain table so other modules can reach individual swatches --
--- tabs.lua tints the tab index with `ansi[5]`.
+-- A plain table so other modules can reach individual swatches.
 local M = palettes[ACTIVE]
 if not M then
   error("colors.lua: unknown ACTIVE palette '" .. tostring(ACTIVE) .. "'")

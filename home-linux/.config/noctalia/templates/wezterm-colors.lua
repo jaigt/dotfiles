@@ -1,7 +1,5 @@
 -- Noctalia template -> ~/.config/wezterm/colors-noctalia.lua
--- Emits a Lua module in the same shape wezterm/colors.lua returns, so
--- appearance.lua (config.colors = ...) and tabs.lua (ansi[5]) work unchanged.
--- Tab bar mirrors the flat Kanagawa style, not Noctalia's primary-pill look.
+-- Same shape wezterm/colors.lua returns, so its consumers work unchanged.
 return {
   foreground = '{{colors.terminal_foreground.default.hex}}',
   background = '{{colors.terminal_background.default.hex}}',

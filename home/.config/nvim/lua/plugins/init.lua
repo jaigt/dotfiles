@@ -1,13 +1,6 @@
--- The plugin manifest.
+-- vim.pack writes nvim-pack-lock.json next to this file. Commit it.
 --
--- vim.pack ships with Neovim 0.12 -- there is nothing to bootstrap. On first
--- launch it git-clones everything below into
--- `stdpath('data')/site/pack/core/opt/` and writes `nvim-pack-lock.json` next
--- to this config, pinning exact revisions. Commit that lockfile.
---
---   :lua vim.pack.update()          update everything (opens a reviewable diff;
---                                   :w to accept, :q to discard)
---   :lua vim.pack.update(nil, { offline = true })   list what's installed
+--   :lua vim.pack.update()          update all (reviewable diff; :w / :q)
 --   :lua vim.pack.del({ 'name' })   remove one
 
 local function gh(repo)
@@ -17,14 +10,11 @@ end
 vim.pack.add({
 	-- Appearance --------------------------------------------------------------
 	gh("rebelot/kanagawa.nvim"), -- kept for the flip-back; see colorscheme.lua
-	-- `name` is required: the repo is rose-pine/neovim, so without it vim.pack
-	-- would clone into a directory called `neovim` and `require("rose-pine")`
-	-- would fail.
+	-- `name` required: the repo is rose-pine/neovim, so vim.pack would otherwise
+	-- clone into `neovim` and require("rose-pine") would fail.
 	{ src = gh("rose-pine/neovim"), name = "rose-pine" }, -- the system theme; see colorscheme.lua
-	-- Only ever loaded on Linux, where matugen.lua renders the Noctalia palette
-	-- through it. Declared here rather than in home-linux's colorscheme.lua so
-	-- both machines produce the same lockfile -- when the plugin sets differ,
-	-- whichever box last ran vim.pack.update() drops the other's entries.
+	-- Linux-only at runtime, but declared here so both machines produce the same
+	-- lockfile — otherwise whichever box last ran update() drops the other's.
 	gh("RRethy/base16-nvim"),
 	gh("nvim-mini/mini.icons"), -- file-type icons for the picker + statusline
 	gh("nvim-lualine/lualine.nvim"), -- statusline
@@ -32,16 +22,14 @@ vim.pack.add({
 	gh("akinsho/bufferline.nvim"), -- open buffers along the top
 
 	-- Language understanding ---------------------------------------------------
-	-- `main` is the current rewrite of nvim-treesitter. The old `master` branch
-	-- is frozen. They have different APIs -- most blog posts you find online are
-	-- about `master`, so check the branch before copying anything.
+	-- `main` and the frozen `master` have different APIs, and most material
+	-- online is about `master`. Check the branch before copying anything.
 	{ src = gh("nvim-treesitter/nvim-treesitter"), version = "main" },
 	gh("nvim-treesitter/nvim-treesitter-context"), -- sticky scroll
 
 	-- Completion ---------------------------------------------------------------
-	-- Pinned to the v1 tag range so vim.pack fetches a release, which ships a
-	-- prebuilt fuzzy-matcher binary. Tracking the branch instead would require a
-	-- local Rust toolchain to compile it.
+	-- Tag range, not branch: releases ship a prebuilt fuzzy-matcher binary;
+	-- tracking the branch would need a local Rust toolchain.
 	{ src = gh("saghen/blink.cmp"), version = vim.version.range("1") },
 	gh("rafamadriz/friendly-snippets"), -- the snippet library blink expands
 
@@ -66,8 +54,7 @@ vim.pack.add({
 
 	-- Git ----------------------------------------------------------------------
 	gh("lewis6991/gitsigns.nvim"), -- gutter hunks, stage/reset a hunk, blame
-	-- On first run it curls a prebuilt C diff library into its data dir; the
-	-- lockfile rev pins which binary that is.
+	-- Curls a prebuilt C diff library on first run; the lockfile rev pins it.
 	gh("esmuellert/codediff.nvim"), -- VSCode-style diff review UI + mergetool
 
 	-- Etc. --------------------------------------------------------------------

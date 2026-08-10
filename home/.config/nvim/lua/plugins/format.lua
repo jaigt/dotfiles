@@ -3,8 +3,7 @@
 
 require("conform").setup({
   formatters_by_ft = {
-    -- prettierd is a daemon: it keeps prettier warm between saves (~800ms to
-    -- ~30ms on a TSX file).
+    -- prettierd is a daemon; it keeps prettier warm between saves.
     typescript = { "prettierd", "prettier", stop_after_first = true },
     typescriptreact = { "prettierd", "prettier", stop_after_first = true },
     javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -16,7 +15,7 @@ require("conform").setup({
     html = { "prettierd", "prettier", stop_after_first = true },
     markdown = { "prettierd", "prettier", stop_after_first = true },
 
-    -- Two steps: sort imports, then format -- ruff keeps these separate.
+    -- ruff keeps these separate: sort imports, then format.
     python = { "ruff_organize_imports", "ruff_format" },
 
     lua = { "stylua" },
@@ -25,8 +24,8 @@ require("conform").setup({
   },
 
   format_on_save = function(bufnr)
-    -- Escape hatch for repos with no formatter config, where prettier's
-    -- defaults would rewrite every file:  :FormatDisable  (! = this buffer)
+    -- :FormatDisable — for repos with no formatter config, where prettier's
+    -- defaults would rewrite every file.
     if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
       return
     end
@@ -39,9 +38,9 @@ require("conform").setup({
 
 vim.api.nvim_create_user_command("FormatDisable", function(args)
   if args.bang then
-    vim.b.disable_autoformat = true -- this buffer only
+    vim.b.disable_autoformat = true
   else
-    vim.g.disable_autoformat = true -- everywhere, until you restart
+    vim.g.disable_autoformat = true
   end
 end, { desc = "Turn off format-on-save (! = this buffer only)", bang = true })
 

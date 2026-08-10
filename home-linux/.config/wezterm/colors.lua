@@ -1,9 +1,8 @@
 -- Kanagawa palettes. Flip ACTIVE and save -- WezTerm hot-reloads the config.
 --
--- Linux copy (home-linux). Noctalia's wallpaper templates render
--- colors-noctalia.lua next to this file (machine-local, never in the repo);
--- when it exists it wins. Disable the template in noctalia.toml and delete
--- that file to fall back to the static Kanagawa tables below.
+-- Noctalia's templates render a machine-local colors-noctalia.lua next to this
+-- file; when it exists it wins. Disable the template in noctalia.toml and
+-- delete it to fall back to the static tables below.
 do
   local ok, noctalia = pcall(require, 'colors-noctalia')
   if ok and type(noctalia) == 'table' then
@@ -11,10 +10,9 @@ do
   end
 end
 
--- Do NOT use WezTerm's built-in 'Kanagawa Dragon (Gogh)' scheme. It is
--- mislabelled: its background is #1f1f28 and its foreground #ddd8bb, which are
--- Wave's values, not Dragon's (#181616 / #c5c9c5), and the ANSI row is Wave's.
--- Everything below comes from rebelot/kanagawa.nvim's own `term` table.
+-- Do NOT use WezTerm's built-in 'Kanagawa Dragon (Gogh)': it is mislabelled,
+-- carrying Wave's background, foreground and ANSI row. Everything below comes
+-- from rebelot/kanagawa.nvim's own `term` table.
 
 local ACTIVE = 'kanagawa-hybrid' -- 'kanagawa-dragon' | 'kanagawa-hybrid' | 'kanagawa-wave'
 
@@ -23,9 +21,9 @@ local palettes = {}
 --------------------------------------------------------------------------------
 -- Kanagawa Dragon -- the muted, warm-charcoal variant.
 --------------------------------------------------------------------------------
--- Upstream reuses Wave's colours for Dragon's bright row. Note bright-black is
--- #a6a69c, light enough that "dimmed" CLI output reads nearly as bright as body
--- text; #625e5a (dragonBlack6) is the fix if that bothers you.
+-- Upstream reuses Wave's colours for Dragon's bright row, so bright-black is
+-- light enough that "dimmed" output reads nearly as bright as body text.
+-- dragonBlack6 (#625e5a) is the fix if that bothers you.
 palettes['kanagawa-dragon'] = {
   foreground = '#c5c9c5', -- dragonWhite
   background = '#181616', -- dragonBlack3
@@ -74,8 +72,7 @@ palettes['kanagawa-dragon'] = {
 --------------------------------------------------------------------------------
 -- Kanagawa Hybrid -- Dragon's shell, Wave's colours.
 --------------------------------------------------------------------------------
--- Dragon's background, cursor, selection and tab bar, carrying Wave's ANSI rows
--- and foreground. Hand-mixed; not an upstream variant.
+-- Hand-mixed, not an upstream variant.
 palettes['kanagawa-hybrid'] = {
   foreground = '#DCD7BA', -- Wave's fujiWhite
   background = '#181616', -- Dragon's dragonBlack3
@@ -90,7 +87,6 @@ palettes['kanagawa-hybrid'] = {
   scrollbar_thumb = '#282727', -- Dragon's bg_p1
   split = '#282727',
 
-  -- Wave's rows wholesale.
   ansi = {
     '#16161D',
     '#C34043',
@@ -170,8 +166,7 @@ palettes['kanagawa-wave'] = {
   },
 }
 
--- Returned as a plain table so other modules can reach individual swatches --
--- tabs.lua tints the tab index with `ansi[5]`.
+-- A plain table so other modules can reach individual swatches.
 local M = palettes[ACTIVE]
 if not M then
   error("colors.lua: unknown ACTIVE palette '" .. tostring(ACTIVE) .. "'")

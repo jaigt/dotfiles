@@ -7,7 +7,6 @@ window.thunar {
   color: #DCD7BA;
 }
 
-/* Sidebar — darker pane like the Finder sidebar */
 window.thunar .sidebar,
 window.thunar .sidebar treeview {
   background-color: #12120f;
@@ -18,7 +17,6 @@ window.thunar .sidebar treeview:selected {
   color: #DCD7BA;
 }
 
-/* Toolbar — flat, blends into the content like a headerbar */
 window.thunar toolbar {
   background-color: #181616;
   border-bottom: 1px solid #393836;
@@ -41,7 +39,6 @@ window.thunar toolbar entry {
   border-radius: 6px;
 }
 
-/* File view */
 window.thunar .view {
   background-color: #181616;
   color: #DCD7BA;
@@ -51,14 +48,12 @@ window.thunar .view:selected {
   color: #DCD7BA;
 }
 
-/* Status bar */
 window.thunar statusbar {
   background-color: #12120f;
   border-top: 1px solid #393836;
   color: #727169;
 }
 
-/* Slim scrollbars */
 window.thunar scrollbar slider {
   background-color: #393836;
   border-radius: 6px;

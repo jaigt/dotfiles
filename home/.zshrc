@@ -1,12 +1,6 @@
-################################################################################
-# Platform — this file is shared between macOS (Homebrew) and Arch/CachyOS.
-# Everything OS-specific resolves here; the rest of the file uses the results.
-#
-# macOS note: zsh only reads .zprofile for LOGIN shells. An interactive
-# non-login shell never sees it, so BREW_PREFIX comes out empty and every
-# plugin sourced from it below silently fails to load. Run shellenv here too,
-# if it hasn't already.
-################################################################################
+# zsh reads .zprofile for LOGIN shells only, so an interactive non-login shell
+# leaves BREW_PREFIX empty and every plugin below silently fails to load.
+# Hence running shellenv here too.
 if [[ "$OSTYPE" == darwin* ]]; then
   export HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1
   (( $+commands[brew] )) || eval "$(/opt/homebrew/bin/brew shellenv zsh)"
@@ -22,19 +16,13 @@ else
   EXTRA_SITE_FUNCTIONS=""
 fi
 
-# ~/.local/bin (see .zprofile). `typeset -U` makes $path a unique array, so this
-# prepend is idempotent: nesting shells can't grow it.
+# `typeset -U` makes $path unique, so this prepend is idempotent under nesting.
 typeset -U path PATH
 path=("$HOME/.local/bin" $path)
 
-################################################################################
-# Secrets — ~/.zsh_secrets, never tracked by git. See docs/secrets.md.
-################################################################################
+# ~/.zsh_secrets is never tracked by git. See docs/secrets.md.
 [[ -f "$HOME/.zsh_secrets" ]] && source "$HOME/.zsh_secrets"
 
-################################################################################
-# History
-################################################################################
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=50000
@@ -44,23 +32,18 @@ setopt HIST_IGNORE_SPACE      # leading space = don't record (for secrets)
 setopt HIST_REDUCE_BLANKS
 setopt EXTENDED_HISTORY
 
-################################################################################
-# Completion engine
-#
-# Must come before fzf-tab, which hooks the menu that compinit sets up.
-# Homebrew's completions live outside the default fpath, so add them first.
-################################################################################
+# Must come before fzf-tab, which hooks the menu compinit sets up. Homebrew's
+# completions live outside the default fpath, so add them first.
 typeset -U fpath FPATH
 [[ -n "$EXTRA_SITE_FUNCTIONS" ]] && fpath=("$EXTRA_SITE_FUNCTIONS" $fpath)
 
 autoload -Uz compinit
-# Rebuild the completion cache once a day rather than on every shell start.
+# Rebuild the completion cache daily, not per shell.
 #
-# The (#q...) glob qualifier needs EXTENDED_GLOB, which is off by default. With
-# it off zsh reads the qualifier as a literal filename, so the test is ALWAYS
-# true and the slow path runs every time. Setting EXTENDED_GLOB globally would
-# change how `#`, `^` and `~` behave for every plugin below, so turn it on only
-# inside this anonymous function, where `localoptions` restores it on return.
+# The (#q...) qualifier needs EXTENDED_GLOB; without it zsh reads it as a
+# literal filename and the test is ALWAYS true. Enabling it globally would
+# change `#`, `^` and `~` for every plugin below, hence the anonymous function
+# with `localoptions`.
 if [[ ! -f "$HOME/.zcompdump" ]] || () {
      setopt localoptions extendedglob
      [[ -n $HOME/.zcompdump(#qN.mh+24) ]]
@@ -75,15 +58,9 @@ zstyle ':completion:*' menu no                    # fzf-tab replaces the menu
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*:descriptions' format '[%d]' # fzf-tab shows these as group headers
 
-################################################################################
-# fzf — Ctrl+T (files), Ctrl+R (history), Alt+C (cd)
-################################################################################
 source <(fzf --zsh)
 
-################################################################################
-# fzf-tab — turns Tab into a fuzzy-filterable menu.
-# Sourced after compinit and after the zstyles above, before other plugins.
-################################################################################
+# fzf-tab: after compinit and the zstyles above, before other plugins.
 source "$PLUGIN_FZF_TAB"
 
 zstyle ':fzf-tab:*' fzf-flags --height=45% --layout=reverse --border
@@ -91,9 +68,6 @@ zstyle ':fzf-tab:*' use-fzf-default-opts yes
 zstyle ':fzf-tab:*' switch-group ',' '.'          # cycle between groups
 zstyle ':fzf-tab:complete:(cd|z|ls|eza):*' fzf-preview 'ls -1 --color=always "$realpath" 2>/dev/null || ls -1 "$realpath"'
 
-################################################################################
-# Tools
-################################################################################
 eval "$(zoxide init zsh)"
 
 cc() {
@@ -116,37 +90,27 @@ alias vim="nvim"
 alias vi="nvim"
 alias v="nvim"
 
-# Review changes without "opening an editor": straight into the codediff
-# explorer, q exits back to the shell. `gdiff` = working tree, `gdiff main...`
-# = branch compare, `gdiff --staged` = what the next commit contains.
+# Straight into the codediff explorer; q exits back to the shell.
 gdiff() {
   nvim "+CodeDiff --exit-on-close ${*}"
 }
 
 # Noctalia (Linux) merges the wallpaper palette into this machine-local copy;
-# absent (macOS, or templates off) starship falls back to ~/.config/starship.toml.
+# without it starship falls back to the repo's starship.toml.
 [[ -f "$HOME/.config/starship-noctalia.toml" ]] && export STARSHIP_CONFIG="$HOME/.config/starship-noctalia.toml"
 eval "$(starship init zsh)"
 
 alias update="brew update && brew upgrade && brew cleanup"
 
-################################################################################
-# Machine-local overrides — ~/.zsh_local if it exists. Anything too specific to
-# this setup to belong in a config other people read.
-################################################################################
+# Machine-local overrides, too specific to belong in a published config.
 [[ -f "$HOME/.zsh_local" ]] && source "$HOME/.zsh_local"
 
-################################################################################
-# Line-editor plugins — these must come last.
-#
-# fast-syntax-highlighting wraps the ZLE widgets, so anything that also wraps
-# them has to be sourced before it. zsh-autosuggestions is the documented
-# exception: it goes after, or the highlighter repaints over its ghost text.
-################################################################################
+# These must come last. fast-syntax-highlighting wraps the ZLE widgets, so
+# anything else that wraps them is sourced before it. zsh-autosuggestions is
+# the documented exception — after, or the highlighter repaints its ghost text.
 source "$PLUGIN_FSH"
 source "$PLUGIN_AUTOSUGGEST"
 
-# graphite highlight_high -- the same grey as the wezterm cursor.
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#5b5b5b'
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 bindkey '^ ' autosuggest-accept

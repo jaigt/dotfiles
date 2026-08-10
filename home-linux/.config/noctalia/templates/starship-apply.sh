@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
-# Merge the repo starship.toml (prompt structure + default Kanagawa palette)
-# with the Noctalia-rendered palette into a machine-local config. The repo
-# file is only ever read; starship rereads STARSHIP_CONFIG every prompt, so
-# running shells recolor live.
+# Merge the repo starship.toml with the Noctalia palette into a machine-local
+# config. The repo file is only ever read.
 set -euo pipefail
 
 base="${XDG_CONFIG_HOME:-$HOME/.config}/starship.toml"

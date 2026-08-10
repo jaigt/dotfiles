@@ -1,9 +1,5 @@
--- Rosé Pine "graphite" -- stock main foregrounds over a fully desaturated
--- background ramp, same pairing as wezterm/colors.lua and nvim.
--- Sketchybar wants 0xAARRGGBB, so every colour carries an alpha byte.
---
--- Rosé Pine has six hues where this file has eight slots. The two slots no
--- item currently uses (aqua, pink) are aliases; the other six are one-to-one.
+-- Rosé Pine "graphite". Sketchybar wants 0xAARRGGBB, hence the alpha byte on
+-- every colour. Surplus hue slots are aliases, not new colours.
 
 local M = {
   -- Background tiers, graphite ------------------------------------------------
@@ -31,14 +27,12 @@ local M = {
   transparent = 0x00000000,
 }
 
--- Pills. The bar itself is deliberately transparent; the brackets draw.
 M.bar_color    = M.transparent
 M.pill_bg      = 0xd9262626 -- ~85% bg_p1
 M.pill_border  = 0x805b5b5b -- ~50% bg_p3
 M.popup_bg     = 0xf2262626
 M.popup_border = M.bg_p2
 
--- Semantic roles.
 M.accent = M.blue
 M.good   = M.green
 M.warn   = M.yellow

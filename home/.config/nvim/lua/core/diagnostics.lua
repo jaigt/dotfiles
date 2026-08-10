@@ -1,12 +1,8 @@
--- How errors and warnings are displayed.
---
--- `virtual_lines` renders the full message on its own line underneath the
--- offending code, rather than truncating it at the screen edge the way
--- `virtual_text` does. Native since 0.11, off by default.
+-- `virtual_lines` prints the full message under the code instead of truncating
+-- it at the screen edge like `virtual_text`. Only for the cursor's line —
+-- every line at once pushes the code apart into ribbons.
 
 vim.diagnostic.config({
-  -- Only expand the error under the cursor; every line at once pushes the code
-  -- apart into ribbons.
   virtual_lines = { current_line = true },
 
   signs = {
@@ -19,11 +15,11 @@ vim.diagnostic.config({
   },
 
   underline = true,
-  update_in_insert = false, -- don't flag errors mid-keystroke; it's just noise
-  severity_sort = true, -- errors win the gutter over warnings on the same line
+  update_in_insert = false, -- mid-keystroke errors are noise
+  severity_sort = true, -- errors win the gutter over warnings
 
   float = {
     border = "rounded",
-    source = true, -- say WHICH tool complained (eslint? vtsls? ruff?)
+    source = true, -- which tool complained
   },
 })
