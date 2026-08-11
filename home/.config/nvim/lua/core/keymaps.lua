@@ -158,14 +158,6 @@ end, { desc = "Toggle diagnostic style" })
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 map("n", "<leader>w", "<cmd>write<cr>", { desc = "Save file" })
 
--- create new session w current windows
--- switch to session from list
---  -- if no sessions graceful error
---  -- save current session as a session before switching?
--- delete session from list
--- -- if no session graceful error
--- restart and keep session
-
 map("n", "<leader>qs", function()
 	sessions.select()
 end, { desc = "Switch to a session" })

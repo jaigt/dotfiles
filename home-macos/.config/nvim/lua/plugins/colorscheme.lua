@@ -113,15 +113,15 @@ local function setup_rose_pine()
 				highlight_high = "#5b5b5b",
 			},
 		},
-
-		-- `transparency = true` clears floats too; opaque surfaces painted back.
-		highlight_groups = {
-			NormalFloat = { bg = "surface" },
-			FloatBorder = { bg = "surface", fg = "highlight_high" },
-			FloatTitle = { bg = "surface", fg = "text" },
-			Pmenu = { bg = "surface" },
-			PmenuSel = { bg = "highlight_med" },
-		},
+		--
+		-- -- `transparency = true` clears floats too; opaque surfaces painted back.
+		-- highlight_groups = {
+		-- 	NormalFloat = { bg = "surface" },
+		-- 	FloatBorder = { bg = "surface", fg = "highlight_high" },
+		-- 	FloatTitle = { bg = "surface", fg = "text" },
+		-- 	Pmenu = { bg = "surface" },
+		-- 	PmenuSel = { bg = "highlight_med" },
+		-- },
 	})
 end
 
