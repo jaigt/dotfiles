@@ -35,6 +35,8 @@ brew "git"
 brew "herdr"
 # Interpreted, interactive, object-oriented programming language
 brew "python@3.14"
+# Search tool like grep and The Silver Searcher
+brew "ripgrep"
 # Self-improving AI agent that creates skills from experience
 brew "hermes-agent"
 # Powerful, lightweight programming language
@@ -45,8 +47,6 @@ brew "luajit"
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
 brew "neovim"
-# Search tool like grep and The Silver Searcher
-brew "ripgrep"
 # AI coding agent, built for the terminal
 brew "opencode"
 # Execute binaries from Python packages in isolated environments
@@ -81,16 +81,12 @@ cask "alcove"
 cask "appcleaner"
 # Chromium based browser
 cask "arc"
-# Web browser with built-in AI assistant
-cask "aside"
 # Desktop password and login vault
 cask "bitwarden"
 # Open source IDE for exploring and testing APIs
 cask "bruno"
 # Anthropic's official Claude AI desktop app
 cask "claude"
-# Voice and text chat software
-cask "discord"
 # App to build and share containerised applications and microservices
 cask "docker-desktop"
 cask "font-caskaydia-cove-nerd-font"
@@ -115,6 +111,8 @@ cask "spotify"
 cask "steam"
 # Web browser
 cask "thebrowsercompany-dia"
+# Custom Discord App
+cask "vesktop"
 # GPU-accelerated cross-platform terminal emulator and multiplexer
 cask "wezterm@nightly"
 # Native desktop client for WhatsApp
