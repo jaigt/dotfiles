@@ -170,6 +170,10 @@ map("n", "<leader>qs", function()
 	sessions.select()
 end, { desc = "Switch to a session" })
 
+map("n", "<leader>qr", function()
+	sessions.restart()
+end, { desc = "Restart Neovim w/ Session Restored" })
+
 map("n", "<leader>qw", function()
 	local input = vim.fn.input("Enter session name: ")
 	if input and input ~= "" then
