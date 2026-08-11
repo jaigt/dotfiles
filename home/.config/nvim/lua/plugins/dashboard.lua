@@ -33,7 +33,7 @@ starter.setup({
 		-- `info = false`: the default spawns git subprocesses per plugin, on every
 		-- refresh. The count alone comes from the lockfile.
 		local n = #(vim.pack.get(nil, { info = false }) or {})
-		return ("%d plugins · nvim %s"):format(n, tostring(vim.version()))
+		return ("%d plugins · nvim %s\n%s"):format(n, tostring(vim.version()), tostring(vim.fn.getcwd()))
 	end,
 
 	evaluate_single = true,
