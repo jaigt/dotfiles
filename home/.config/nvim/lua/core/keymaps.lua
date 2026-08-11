@@ -58,10 +58,10 @@ map("n", "<leader>sk", fzf.keymaps, { desc = "Search keymaps" })
 map("n", "<leader>sr", fzf.resume, { desc = "Resume last picker" })
 
 -- Files -----------------------------------------------------------------------
-map("n", "-", "<cmd>Oil<cr>", { desc = "Open parent directory (oil)" })
+map("n", "-", "<cmd>Oil --float<cr>", { desc = "File browser (Oil)" })
 map("n", "<leader>e", function()
 	require("oil").open_float()
-end, { desc = "File browser (floating oil)" })
+end, { desc = "File browser (Oil)" })
 map("n", "<leader>E", "<cmd>Neotree toggle<cr>", { desc = "File tree (neo-tree)" })
 
 -- Terminal --------------------------------------------------------------------
@@ -158,31 +158,28 @@ end, { desc = "Toggle diagnostic style" })
 map("n", "<leader>qq", "<cmd>qa<cr>", { desc = "Quit all" })
 map("n", "<leader>w", "<cmd>write<cr>", { desc = "Save file" })
 
+-- create new session w current windows
+-- switch to session from list
+--  -- if no sessions graceful error
+--  -- save current session as a session before switching?
+-- delete session from list
+-- -- if no session graceful error
+-- restart and keep session
+
 map("n", "<leader>qs", function()
-	vim.cmd("wa")
-	if sessions.get_latest() then
-		sessions.write()
-	end
 	sessions.select()
-end, { desc = "Switch session" })
-map("n", "<leader>ql", function()
-	vim.cmd("wa")
-	sessions.select()
-end, { desc = "Select session" })
+end, { desc = "Switch to a session" })
+
 map("n", "<leader>qw", function()
-	if sessions.get_latest() then
-		sessions.write()
-		print("Session updated.")
+	local input = vim.fn.input("Enter session name: ")
+	if input and input ~= "" then
+		sessions.write(input)
+		print("\nCreated new session: " .. input)
 	else
-		local input = vim.fn.input("Enter new session name: ")
-		if input and input ~= "" then
-			sessions.write(input)
-			print("\nCreated new session: " .. input)
-		else
-			print("\nSession save cancelled.")
-		end
+		print("\nSession save cancelled.")
 	end
-end, { desc = "Save session" })
+end, { desc = "Save this session" })
+
 map("n", "<leader>qd", function()
 	require("mini.sessions").select("delete")
 	vim.cmd("redraw")

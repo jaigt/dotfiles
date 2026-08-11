@@ -16,7 +16,7 @@ starter.setup({
 		{ name = "New file", action = "enew", section = "" },
 		{ name = "Find files", action = "FzfLua files", section = "" },
 		{ name = "Recent files", action = "FzfLua oldfiles", section = "" },
-		{ name = "Browse (oil)", action = "Oil", section = "" },
+		{ name = "Browse (oil)", action = "Oil --float", section = "" },
 		-- reveal=false: revealing the starter's ministarter:// pseudo-buffer
 		-- triggers a change-cwd prompt.
 		{ name = "Tree sidebar (neo-tree)", action = "Neotree reveal=false", section = "" },
@@ -40,7 +40,8 @@ starter.setup({
 })
 
 local function set_starter_hl()
-	vim.api.nvim_set_hl(0, "MiniStarterHeader", { fg = "#c4a7e7" })
+	-- vim.api.nvim_set_hl(0, "MiniStarterHeader", { fg = "#c4a7e7" })
+	vim.api.nvim_set_hl(0, "MiniStarterHeader", { fg = "#9ccfd8" })
 	vim.api.nvim_set_hl(0, "MiniStarterFooter", { link = "Comment" })
 end
 

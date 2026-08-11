@@ -1,6 +1,6 @@
 -- fzf-lua wraps the Homebrew fzf binary and uses fd for file listing.
 require("fzf-lua").setup({
-	"default-title",
+	"telescope",
 	winopts = {
 		height = 0.85,
 		width = 0.85,
@@ -30,6 +30,7 @@ require("oil").setup({
 	},
 	keymaps = {
 		["q"] = "actions.close",
+		["<Esc>"] = "actions.close",
 	},
 })
 
