@@ -36,6 +36,7 @@ vim.pack.add({
 	-- LSP ----------------------------------------------------------------------
 	gh("neovim/nvim-lspconfig"), -- default settings for ~350 language servers
 	gh("mason-org/mason.nvim"), -- downloads the language server binaries
+	gh("mason-org/mason-lspconfig.nvim"), -- auto-enables whatever mason installs
 	gh("folke/lazydev.nvim"), -- makes lua_ls understand the Neovim API
 
 	-- Editing ------------------------------------------------------------------

@@ -6,61 +6,44 @@ require("mason").setup({
   ui = { border = "rounded" },
 })
 
-local servers = {
-  "vtsls", -- TypeScript/TSX
-  "eslint", -- also the linter, hence no separate one
-  "basedpyright", -- Python types
-  "ruff", -- Python lint + format
-  "marksman", -- markdown
-  "tailwindcss",
-  "lua_ls", -- for editing this config
-  "jsonls",
-  "yamlls",
-  "bashls",
-  "html",
-  "cssls",
-}
-
--- The mason package name doesn't always match the lspconfig server name.
-local mason_packages = {
-  lua_ls = "lua-language-server",
-  jsonls = "json-lsp",
-  yamlls = "yaml-language-server",
-  bashls = "bash-language-server",
-  html = "html-lsp",
-  cssls = "css-lsp",
-  tailwindcss = "tailwindcss-language-server",
-  eslint = "eslint-lsp",
-}
-
-local tools = { "prettierd", "stylua", "shfmt" }
-
--- Mason has no declarative `ensure_installed`, hence driving its registry API.
-vim.api.nvim_create_autocmd("User", {
-  pattern = "MasonToolsBootstrap",
-  once = true,
-  callback = function()
-    local registry = require("mason-registry")
-    registry.refresh(function()
-      local wanted = vim.list_extend(
-        vim.tbl_map(function(s)
-          return mason_packages[s] or s
-        end, servers),
-        tools
-      )
-      for _, name in ipairs(wanted) do
-        local ok, pkg = pcall(registry.get_package, name)
-        if ok and not pkg:is_installed() then
-          vim.notify("Installing " .. name, vim.log.levels.INFO)
-          pkg:install()
-        end
-      end
-    end)
-  end,
+-- Servers installed via :Mason are enabled automatically (automatic_enable),
+-- so a new one needs no entry here — this list only pins what a fresh
+-- machine bootstraps.
+require("mason-lspconfig").setup({
+  ensure_installed = {
+    "vtsls", -- TypeScript/TSX
+    "eslint", -- also the linter, hence no separate one
+    "basedpyright", -- Python types
+    "ruff", -- Python lint + format
+    "marksman", -- markdown
+    "tailwindcss",
+    "lua_ls", -- for editing this config
+    "jsonls",
+    "yamlls",
+    "bashls",
+    "html",
+    "cssls",
+  },
 })
-vim.schedule(function()
-  vim.api.nvim_exec_autocmds("User", { pattern = "MasonToolsBootstrap" })
-end)
+
+-- Non-LSP tools are outside mason-lspconfig's scope, hence the registry API.
+-- refresh() hits the network, so it only runs when something is missing.
+local tools = { "prettierd", "stylua", "shfmt" }
+local registry = require("mason-registry")
+local missing = vim.tbl_filter(function(name)
+  return not registry.is_installed(name)
+end, tools)
+if #missing > 0 then
+  registry.refresh(function()
+    for _, name in ipairs(missing) do
+      local ok, pkg = pcall(registry.get_package, name)
+      if ok then
+        vim.notify("Installing " .. name, vim.log.levels.INFO)
+        pkg:install()
+      end
+    end
+  end)
+end
 
 -- `vim.lsp.config` merges into nvim-lspconfig's defaults, so state only diffs.
 vim.lsp.config("lua_ls", {
@@ -93,8 +76,6 @@ vim.lsp.config("vtsls", {
     },
   },
 })
-
-vim.lsp.enable(servers)
 
 -- K, gd, grn, gra, grr, gri, gO and <C-s> are native defaults — only the gaps
 -- are bound here, on LspAttach so they exist only where a server attached.
