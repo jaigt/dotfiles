@@ -34,6 +34,25 @@ require("oil").setup({
 		["q"] = "actions.close",
 		["<Esc>"] = "actions.close",
 	},
+	float = {
+		override = function(conf)
+			local buf = vim.api.nvim_get_current_buf()
+			local lines = vim.api.nvim_buf_line_count(buf)
+			conf.width = math.max(60, math.min(conf.width, 110))
+			conf.height = math.max(8, math.min(lines + 1, 22))
+			conf.row = 1
+			conf.col = 2
+			return conf
+		end,
+	},
+})
+vim.api.nvim_create_autocmd("User", {
+	pattern = "OilEnter",
+	callback = function(args)
+		if vim.api.nvim_get_current_buf() == args.data.buf then
+			require("oil").open_preview()
+		end
+	end,
 })
 
 require("neo-tree").setup({

@@ -9,6 +9,7 @@ local HEADER = [[
 
 starter.setup({
 	header = HEADER,
+	silent = true,
 
 	-- Empty section name suppresses the label line. First letters stay unique so
 	-- `evaluate_single` launches each item on one key.
