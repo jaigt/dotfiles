@@ -18,9 +18,6 @@ starter.setup({
 		{ name = "Find files", action = "FzfLua files", section = "" },
 		{ name = "Recent files", action = "FzfLua oldfiles", section = "" },
 		{ name = "Browse (oil)", action = "Oil --float", section = "" },
-		-- reveal=false: revealing the starter's ministarter:// pseudo-buffer
-		-- triggers a change-cwd prompt.
-		{ name = "Tree sidebar (neo-tree)", action = "Neotree reveal=false", section = "" },
 		{ name = "Select Session", action = "lua MiniSessions.select()", section = "" },
 		{ name = "Quit", action = "qall", section = "" },
 	},
