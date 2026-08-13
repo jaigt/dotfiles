@@ -69,7 +69,7 @@ end
 -- resize is async, hence the delay.
 function M.spawn(gui_window)
 	local _, base = gui_window:mux_window():spawn_tab({
-		args = then_shell(),
+		args = then_shell("nvim"),
 	})
 	gui_window:maximize()
 	wezterm.time.call_after(0.4, function()
