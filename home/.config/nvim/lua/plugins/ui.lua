@@ -18,6 +18,7 @@ require("which-key").add({
 	{ "<leader>c", group = "code" },
 	{ "<leader>b", group = "buffer" },
 	{ "<leader>u", group = "toggle/ui" },
+	{ "<leader>p", group = "plugins" },
 	{ "<leader>x", group = "diagnostics" },
 	{ "g", group = "goto" },
 	{ "gs", group = "surround", mode = { "n", "x" } },
