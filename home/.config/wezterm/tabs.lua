@@ -15,7 +15,7 @@ local colors = require("colors")
 local M = {}
 
 -- ANSI slots, not literal hexes, so these follow colors.lua's active palette.
-local BAR_BG = colors.tab_bar.background
+local BAR_BG = "rgba(0,0,0,0)" -- the bar strip shows the window backdrop; only the blocks paint
 local BLOCK_BG = colors.ansi[1] -- one step off the base, so the block reads as a block
 local BLOCK_FG = colors.tab_bar.inactive_tab.fg_color -- muted: an inactive title
 local BLOCK_FG_BRIGHT = colors.tab_bar.inactive_tab_hover.fg_color -- subtle: the index, and a hovered title
@@ -97,6 +97,9 @@ function M.apply(config)
 	config.tab_max_width = 32
 	-- The "+" sits at the right edge of the group and pulls it off centre.
 	config.show_new_tab_button_in_tab_bar = false
+	-- The palette's bar colour fills the centring pad and the run past the last
+	-- tab; override it here so the whole strip stays transparent.
+	config.colors.tab_bar.background = BAR_BG
 end
 
 return M
