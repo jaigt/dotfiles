@@ -58,7 +58,7 @@ vim.api.nvim_create_autocmd("User", {
 require("neo-tree").setup({
 	filesystem = {
 		hijack_netrw_behavior = "disabled",
-		follow_current_file = { enabled = true },
+		bind_to_cwd = false,
 		filtered_items = {
 			visible = true,
 			hide_dotfiles = false,

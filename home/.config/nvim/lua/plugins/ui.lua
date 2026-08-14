@@ -92,7 +92,7 @@ require("lualine").setup({
 		lualine_y = { "progress" },
 		lualine_z = { "location" },
 	},
-	extensions = { "oil", "quickfix" },
+	extensions = { "oil", "quickfix", "neotree", "fzf" },
 })
 
 require("bufferline").setup({
