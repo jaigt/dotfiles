@@ -113,6 +113,13 @@ local function setup_rose_pine()
 				highlight_high = "#5b5b5b",
 			},
 		},
+		-- Upstream's transparency pass clears StatusLine/TabLine but forgets
+		-- WinBar/WinBarNC, which keep an opaque panel bg the lualine winbar
+		-- shows through.
+		highlight_groups = {
+			WinBar = { bg = "NONE" },
+			WinBarNC = { bg = "NONE" },
+		},
 		--
 		-- -- `transparency = true` clears floats too; opaque surfaces painted back.
 		-- highlight_groups = {

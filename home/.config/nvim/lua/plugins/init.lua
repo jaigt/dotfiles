@@ -19,7 +19,6 @@ vim.pack.add({
 	gh("nvim-mini/mini.icons"), -- file-type icons for the picker + statusline
 	gh("nvim-lualine/lualine.nvim"), -- statusline
 	gh("nvim-mini/mini.starter"), -- the dashboard on an empty start
-	gh("akinsho/bufferline.nvim"), -- open buffers along the top
 
 	-- Language understanding ---------------------------------------------------
 	-- `main` and the frozen `master` have different APIs, and most material

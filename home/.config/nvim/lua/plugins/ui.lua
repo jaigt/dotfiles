@@ -76,39 +76,52 @@ require("lualine").setup({
 		globalstatus = true,
 		section_separators = "",
 		component_separators = "|",
+		disabled_filetypes = { winbar = { "", "neo-tree", "ministarter" } },
 	},
 	sections = {
 		lualine_a = { "mode" },
 		lualine_b = { "branch" },
-		lualine_c = {
-			{ "filename", path = 1 },
-			{ breadcrumbs },
-		},
+		lualine_c = { { "filename", file_status = true, newfile_status = true, path = 1 }, { breadcrumbs } },
 		lualine_x = {
 			{ "diff", symbols = { added = "+", modified = "~", removed = "-" } },
+
 			{ "diagnostics" },
 			"filetype",
 		},
 		lualine_y = { "progress" },
 		lualine_z = { "location" },
 	},
-	extensions = { "oil", "quickfix", "neo-tree", "fzf" },
-})
-
-require("bufferline").setup({
-	options = {
-		mode = "buffers",
-		diagnostics = "nvim_lsp",
-		diagnostics_indicator = function(_, _, diag)
-			return (diag.error and " " .. diag.error or "") .. (diag.warning and " " .. diag.warning or "")
-		end,
-		show_buffer_close_icons = false,
-		separator_style = "thin",
-		always_show_bufferline = false,
-		offsets = {
-			{ filetype = "oil", text = "Files", highlight = "Directory", separator = true },
+	winbar = {
+		lualine_a = {},
+		lualine_z = {
+			{
+				"buffers",
+				mode = 2, -- name + index; <leader>1-9 jumps by these numbers
+				show_modified_status = true,
+				use_mode_colors = true,
+				symbols = {
+					modified = " ●",
+					alternate_file = "",
+					directory = "",
+				},
+			},
 		},
 	},
+	inactive_winbar = {
+		lualine_a = {
+			{
+				"filename",
+				file_status = true,
+				path = 1,
+				symbols = {
+					modified = "[+]",
+					readonly = "[-]",
+					unnamed = "[No Name]",
+				},
+			},
+		},
+	},
+	extensions = { "oil", "quickfix", "neo-tree", "fzf" },
 })
 
 require("mini.sessions").setup({

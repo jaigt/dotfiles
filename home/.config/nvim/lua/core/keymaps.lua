@@ -27,17 +27,17 @@ map("n", "<leader>-", "<C-w>s", { desc = "Split below" })
 map("n", "<leader>|", "<C-w>v", { desc = "Split right" })
 
 -- Buffers ---------------------------------------------------------------------
-map("n", "<S-h>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Previous buffer" })
-map("n", "<S-l>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next buffer" })
+map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 map("n", "<leader>,", fzf.buffers, { desc = "Switch buffer" })
 map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
 map("n", "<leader>bo", "<cmd>%bdelete|edit#|bdelete#<cr>", { desc = "Delete other buffers" })
-map("n", "<leader>b[", "<cmd>BufferLineMovePrev<cr>", { desc = "Move buffer left" })
-map("n", "<leader>b]", "<cmd>BufferLineMoveNext<cr>", { desc = "Move buffer right" })
-map("n", "<leader>bp", "<cmd>BufferLineTogglePin<cr>", { desc = "Pin buffer" })
+map("n", "<leader>bs", fzf.buffers, { desc = "Switch buffer" })
 for i = 1, 9 do
 	map("n", "<leader>" .. i, function()
-		require("bufferline").go_to(i, true)
+		pcall(function()
+			vim.cmd("LualineBuffersJump " .. i)
+		end)
 	end, { desc = "Go to buffer " .. i })
 end
 
@@ -77,6 +77,7 @@ local termToggle = function()
 	else
 		vim.cmd("botright 15split | term")
 		term_buf = vim.api.nvim_get_current_buf()
+		vim.bo[term_buf].buflisted = false
 		vim.defer_fn(function()
 			if vim.api.nvim_buf_is_valid(term_buf) then
 				vim.api.nvim_buf_set_name(term_buf, "Terminal")
