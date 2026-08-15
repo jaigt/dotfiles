@@ -13,6 +13,9 @@ vim.pack.add({
 	-- `name` required: the repo is rose-pine/neovim, so vim.pack would otherwise
 	-- clone into `neovim` and require("rose-pine") would fail.
 	{ src = gh("rose-pine/neovim"), name = "rose-pine" }, -- the system theme; see colorscheme.lua
+	gh("sainnhe/gruvbox-material"),
+	gh("sainnhe/everforest"),
+	gh("gbprod/nord.nvim"),
 	-- Linux-only at runtime, but declared here so both machines produce the same
 	-- lockfile — otherwise whichever box last ran update() drops the other's.
 	gh("RRethy/base16-nvim"),
