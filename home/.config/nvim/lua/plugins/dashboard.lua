@@ -14,16 +14,14 @@ starter.setup({
 	-- Empty section name suppresses the label line. First letters stay unique so
 	-- `evaluate_single` launches each item on one key.
 	items = {
-		{ name = "New file", action = "enew", section = "" },
-		{ name = "Find files", action = "FzfLua files", section = "" },
-		{ name = "Recent files", action = "FzfLua oldfiles", section = "" },
-		{ name = "Browse (oil)", action = "Oil --float", section = "" },
-		{ name = "Select Session", action = "lua MiniSessions.select()", section = "" },
-		{ name = "Quit", action = "qall", section = "" },
+		{ name = "Files", action = "FzfLua files", section = "" },
+		{ name = "Recent", action = "FzfLua oldfiles", section = "" },
+		{ name = "Explore", action = "Oil --float", section = "" },
+		{ name = "Sessions", action = "lua MiniSessions.select()", section = "" },
 	},
 
 	content_hooks = {
-		starter.gen_hook.adding_bullet("› "),
+		starter.gen_hook.adding_bullet("✦ "),
 		starter.gen_hook.aligning("center", "center"),
 	},
 
