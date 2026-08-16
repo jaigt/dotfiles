@@ -23,7 +23,7 @@ starter.setup({
 	},
 
 	content_hooks = {
-		starter.gen_hook.adding_bullet(),
+		starter.gen_hook.adding_bullet("› "),
 		starter.gen_hook.aligning("center", "center"),
 	},
 
@@ -41,6 +41,10 @@ local function set_starter_hl()
 	-- vim.api.nvim_set_hl(0, "MiniStarterHeader", { fg = "#c4a7e7" })
 	vim.api.nvim_set_hl(0, "MiniStarterHeader", { fg = "#9ccfd8" })
 	vim.api.nvim_set_hl(0, "MiniStarterFooter", { link = "Comment" })
+	-- Hotkey-launcher look: red first letter, plain dash, no "selected" item.
+	vim.api.nvim_set_hl(0, "MiniStarterItemPrefix", { fg = "#f6c177", bold = true })
+	vim.api.nvim_set_hl(0, "MiniStarterItemBullet", { link = "Comment" })
+	vim.api.nvim_set_hl(0, "MiniStarterCurrent", { link = "MiniStarterItem" })
 end
 
 -- Loading a colorscheme clears all highlight groups, hence re-applying.
