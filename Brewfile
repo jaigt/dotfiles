@@ -45,6 +45,8 @@ brew "hermes-agent"
 brew "lua"
 # Just-In-Time Compiler (JIT) for the Lua programming language
 brew "luajit"
+# Deep clean and optimize your Mac
+brew "mole"
 # Incremental parsing library
 brew "tree-sitter"
 # Ambitious Vim-fork focused on extensibility and agility
@@ -81,8 +83,6 @@ brew "felixkratz/formulae/sketchybar"
 brew "haseebkhalid1507/tap/myx", trusted: true
 # Utility to add Dynamic Island like features to notch area
 cask "alcove"
-# Application uninstaller
-cask "appcleaner"
 # Chromium based browser
 cask "arc"
 # Desktop password and login vault
