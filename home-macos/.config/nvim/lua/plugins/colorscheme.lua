@@ -5,7 +5,9 @@ local SCHEMES = {
 	"kanagawa-dragon",
 	"gruvbox-material",
 	"everforest",
-	"nord",
+	"nordic",
+	"vscode",
+	"kanso",
 }
 
 local function setup_rose_pine()
@@ -51,8 +53,37 @@ local LUALINE_EXCEPTIONS = {
 	["kanagawa-dragon"] = "kanagawa",
 }
 
+-- Returns a theme *table*, not a name: the middle section and the whole
+-- inactive mode (non-selected winbar buffers) get their backgrounds stripped
+-- so the statusline stays transparent like the rest of the UI.
 local function lualine_theme(name)
-	return LUALINE_EXCEPTIONS[name] or name
+	name = LUALINE_EXCEPTIONS[name] or name
+	-- Theme modules compute colors from the colorscheme state at require
+	-- time (rose-pine reads its own setup), so a cached table keeps the
+	-- previous palette. Bust the cache and resolve only after activate().
+	local mod = "lualine.themes." .. name
+	package.loaded[mod] = nil
+	local ok, theme = pcall(require, mod)
+	if not ok then
+		package.loaded["lualine.themes.auto"] = nil
+		theme = require("lualine.themes.auto")
+	end
+	theme = vim.deepcopy(theme)
+	for mode_name, mode in pairs(theme) do
+		if type(mode) == "table" then
+			if type(mode.c) == "table" then
+				mode.c.bg = "NONE"
+			end
+			if mode_name == "inactive" then
+				for _, section in pairs(mode) do
+					if type(section) == "table" then
+						section.bg = "NONE"
+					end
+				end
+			end
+		end
+	end
+	return theme
 end
 
 local COLORSCHEME_CMD = {
@@ -119,6 +150,7 @@ vim.keymap.set("n", "<leader>uC", function()
 	end)
 end, { desc = "Pick colorscheme" })
 
-vim.g.lualine_theme = lualine_theme(ACTIVE)
-
+-- activate() must run first: lualine_theme() reads colors the colorscheme
+-- setup produces.
 activate(ACTIVE)
+vim.g.lualine_theme = lualine_theme(ACTIVE)

@@ -15,7 +15,9 @@ vim.pack.add({
 	{ src = gh("rose-pine/neovim"), name = "rose-pine" }, -- the system theme; see colorscheme.lua
 	gh("sainnhe/gruvbox-material"),
 	gh("sainnhe/everforest"),
-	gh("gbprod/nord.nvim"),
+	gh("AlexvZyl/nordic.nvim"),
+	gh("Mofiqul/vscode.nvim"),
+	gh("webhooked/kanso.nvim"),
 	-- Linux-only at runtime, but declared here so both machines produce the same
 	-- lockfile — otherwise whichever box last ran update() drops the other's.
 	gh("RRethy/base16-nvim"),
@@ -65,6 +67,7 @@ vim.pack.add({
 	gh("nvim-mini/mini.sessions"),
 })
 
+require("plugins.dev") -- local plugins in development (runtimepath, not vim.pack)
 require("plugins.colorscheme")
 require("plugins.treesitter")
 require("plugins.completion")
