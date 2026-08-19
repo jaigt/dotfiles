@@ -55,6 +55,8 @@ brew "opencode"
 brew "pipx"
 # Utility that provides fast incremental file transfer
 brew "rsync"
+# Safe, concurrent, practical language
+brew "rust"
 # Prints a steam locomotive if you type sl instead of ls
 brew "sl"
 # Command-line tool to customize Spotify client
@@ -91,6 +93,8 @@ cask "bruno"
 cask "claude"
 # App to build and share containerised applications and microservices
 cask "docker-desktop"
+# Matrix collaboration client
+cask "element"
 cask "font-caskaydia-cove-nerd-font"
 cask "font-ibm-plex-mono"
 cask "font-sketchybar-app-font"
