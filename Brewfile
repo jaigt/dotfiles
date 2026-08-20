@@ -3,6 +3,8 @@ tap "haseebkhalid1507/tap", "https://github.com/HaseebKhalid1507/homebrew-tap"
 tap "nikolaeu/numi", trusted: { formulae: ["numi-cli"] }
 # Aquarium animation in ASCII art
 brew "asciiquarium"
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
 # Open-source, cross-platform JavaScript runtime environment
 brew "node"
 # CLI of the open-source IDE For exploring and testing APIs
@@ -83,8 +85,6 @@ brew "felixkratz/formulae/sketchybar"
 brew "haseebkhalid1507/tap/myx", trusted: true
 # Utility to add Dynamic Island like features to notch area
 cask "alcove"
-# Chromium based browser
-cask "arc"
 # Desktop password and login vault
 cask "bitwarden"
 # Open source IDE for exploring and testing APIs
@@ -99,6 +99,8 @@ cask "font-caskaydia-cove-nerd-font"
 cask "font-ibm-plex-mono"
 cask "font-sketchybar-app-font"
 cask "font-source-code-pro"
+# Chromium-based web browser
+cask "helium-browser"
 # Open-source desktop AI agent
 cask "hermes-desktop"
 # Sandbox construction video game
