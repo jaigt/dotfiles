@@ -57,9 +57,9 @@ body {
 
   /* transparency/blur options */
   /* NOTE: TO USE TRANSPARENCY/BLUR, YOU MUST HAVE TRANSPARENT BG COLORS. FOR EXAMPLE: --bg-4: hsla(220, 15%, 10%, 0.7); */
-  --transparency-tweaks: off; /* off: no changes, on: remove some elements for better transparency */
-  --remove-bg-layer: off; /* off: no changes, on: remove the base --bg-3 layer for use with window transparency (WILL OVERRIDE BACKGROUND IMAGE) */
-  --panel-blur: off; /* off: no changes, on: blur the background of panels */
+  --transparency-tweaks: on; /* off: no changes, on: remove some elements for better transparency */
+  --remove-bg-layer: on; /* off: no changes, on: remove the base --bg-3 layer for use with window transparency (WILL OVERRIDE BACKGROUND IMAGE) */
+  --panel-blur: on; /* off: no changes, on: blur the background of panels */
   --blur-amount: 12px; /* amount of blur */
   --bg-floating: var(--bg-3); /* set this to a more opaque color if floating panels look too transparent. only applies if panel blur is on  */
 
@@ -88,10 +88,10 @@ body {
   --bg-1: {{colors.surface_container_lowest.default.hex}}; /* dark buttons when clicked */
   --bg-2: {{colors.surface_container_low.default.hex}}; /* dark buttons */
   --bg-3: {{colors.surface_container.default.hex}}; /* spacing, secondary elements */
-  --bg-4: {{colors.surface.default.hex}}; /* main background color */
+  --bg-4: {{colors.surface.default.hex}}b3; /* main background color (70% opacity for glass) */
   --hover: {{colors.on_surface.default.hex}}15; /* channels and buttons when hovered */
-  --active: {{colors.surface_container_highest.default.hex}}; /* channels and buttons when clicked or selected */
-  --active-2: {{colors.surface.default.hex}}; /* extra state for transparent buttons */
+  --active: {{colors.on_surface.default.hex}}2b; /* channels and buttons when clicked or selected */
+  --active-2: {{colors.on_surface.default.hex}}40; /* extra state for transparent buttons */
   --message-hover: {{colors.surface_variant.default.hex}}40; /* messages when hovered */
 
   /* accent colors */
