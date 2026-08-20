@@ -65,12 +65,12 @@
       }
     }
   },
+  "outputStyle": "Concise",
   "awaySummaryEnabled": false,
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
-  "theme": "dark-ansi",
+  "theme": "dark-daltonized",
   "verbose": false,
-  "outputStyle": "Concise",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true
 }
