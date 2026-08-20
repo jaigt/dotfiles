@@ -69,7 +69,7 @@
   "awaySummaryEnabled": false,
   "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
-  "theme": "dark-daltonized",
+  "theme": "custom:rose-pine",
   "verbose": false,
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true
