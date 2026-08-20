@@ -114,3 +114,5 @@ source "$PLUGIN_AUTOSUGGEST"
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#5b5b5b'
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 bindkey '^ ' autosuggest-accept
+
+. "$HOME/.cargo/env"
