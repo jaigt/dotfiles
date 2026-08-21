@@ -13,6 +13,7 @@ require("which-key").add({
 	{ "<leader>c", group = "code" },
 	{ "<leader>b", group = "buffer" },
 	{ "<leader>u", group = "toggle/ui" },
+	{ "<leader>o", group = "obsidian" },
 	{ "<leader>p", group = "plugins" },
 	{ "<leader>x", group = "diagnostics" },
 	{ "g", group = "goto" },

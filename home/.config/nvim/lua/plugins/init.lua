@@ -54,7 +54,10 @@ vim.pack.add({
 	-- Etc.
 	gh("folke/which-key.nvim"), -- press a prefix, see what's available
 	gh("nvim-mini/mini.sessions"),
-	--gh("nvim-obsidian/obsidian-nvim"),
+
+	-- Obsidian
+	gh("obsidian-nvim/obsidian.nvim"),
+	gh("MeanderingProgrammer/render-markdown.nvim"),
 })
 
 require("plugins.dev") -- local plugins in development (runtimepath, not vim.pack)
@@ -66,3 +69,4 @@ require("plugins.editing")
 require("plugins.navigation")
 require("plugins.git")
 require("plugins.etc")
+require("plugins.obsidian")

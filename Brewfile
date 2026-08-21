@@ -57,6 +57,8 @@ brew "neovim"
 brew "opencode"
 # Execute binaries from Python packages in isolated environments
 brew "pipx"
+# Paste PNG into files (obsidian.nvim image paste)
+brew "pngpaste"
 # Utility that provides fast incremental file transfer
 brew "rsync"
 # Safe, concurrent, practical language
