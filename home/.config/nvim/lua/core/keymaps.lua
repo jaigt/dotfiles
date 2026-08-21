@@ -29,6 +29,7 @@ map("n", "<leader>|", "<C-w>v", { desc = "Split right" })
 -- Buffers ---------------------------------------------------------------------
 map("n", "<S-h>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
 map("n", "<S-l>", "<cmd>bnext<cr>", { desc = "Next buffer" })
+map("n", "<leader><Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
 map("n", "<leader>,", fzf.buffers, { desc = "Switch buffer" })
 map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
 map("n", "<leader>bo", "<cmd>%bdelete|edit#|bdelete#<cr>", { desc = "Delete other buffers" })
