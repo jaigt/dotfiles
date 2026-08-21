@@ -111,6 +111,8 @@ cask "numi"
 cask "obsidian"
 # VPN client focusing on security
 cask "protonvpn"
+# Control your tools with a few keystrokes
+cask "raycast"
 # Team communication and collaboration software
 cask "slack"
 # Music streaming service
