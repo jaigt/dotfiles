@@ -176,6 +176,11 @@ refuse() { say "  ${red}skip${reset}      $1 ${dim}($2)${reset}"; adopt_skipped=
 adopt_one() {
   local abs="$1" from="${2:-arg}" rel reldest dest rule hit
 
+  # The repo is under $HOME too, so without this a repo path "adopts" the
+  # repo's own files into home/.dotfiles/... and leaves dangling self-links.
+  case "$abs" in
+    "$REPO"/*) refuse "$abs" "inside the repo — adopt the live copy under ~ instead"; return ;;
+  esac
   case "$abs" in
     "$HOME"/*) rel="${abs#$HOME/}" ;;
     *) refuse "$abs" "not under \$HOME"; return ;;
