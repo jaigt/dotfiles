@@ -3,14 +3,10 @@ local function gh(repo)
 end
 
 vim.pack.add({
-	-- Colorschemes
-	gh("rebelot/kanagawa.nvim"),
+	-- Colorschemes; others come session-only from fzf's awesome_colorschemes.
+	-- rose-pine is the macOS default, kanagawa + base16 are used on Linux.
 	{ src = gh("rose-pine/neovim"), name = "rose-pine" },
-	gh("sainnhe/gruvbox-material"),
-	gh("sainnhe/everforest"),
-	gh("AlexvZyl/nordic.nvim"),
-	gh("Mofiqul/vscode.nvim"),
-	gh("webhooked/kanso.nvim"),
+	gh("rebelot/kanagawa.nvim"),
 	gh("RRethy/base16-nvim"),
 
 	-- Dashboard

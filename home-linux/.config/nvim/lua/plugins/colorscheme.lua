@@ -8,7 +8,6 @@
 -- its own bg over every cell, so that painting is off below. Floats stay
 -- opaque — transparent floats mean text over text.
 
--- base16-nvim is declared in the shared plugins/init.lua — see the note there.
 local has_noctalia = vim.uv.fs_stat(vim.fn.stdpath("config") .. "/lua/matugen.lua") ~= nil
 
 local ACTIVE = has_noctalia and "noctalia" or "kanagawa-hybrid"

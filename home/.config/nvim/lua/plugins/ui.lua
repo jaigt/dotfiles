@@ -47,8 +47,8 @@ end
 -- lualine ---------------------------------------------------------------------
 require("lualine").setup({
 	options = {
-		-- The theme ships with rose-pine/neovim, not lualine. colorscheme.lua
-		-- restyles this on a cycle.
+		-- Set by colorscheme.lua at startup; its ColorScheme autocmd
+		-- restyles on every scheme change.
 		theme = vim.g.lualine_theme or "rose-pine",
 		globalstatus = true,
 		section_separators = "",

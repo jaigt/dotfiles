@@ -1,67 +1,44 @@
-local ACTIVE = "rose-pine"
+-- rose-pine is the only installed scheme; anything else is auditioned
+-- session-only via fzf's awesome_colorschemes (<leader>sc). The ColorScheme
+-- autocmd below gives those the same transparency treatment.
 
-local SCHEMES = {
-	"rose-pine",
-	"kanagawa-dragon",
-	"gruvbox-material",
-	"everforest",
-	"nordic",
-	"vscode",
-	"kanso",
-}
-
-local function setup_rose_pine()
-	require("rose-pine").setup({
-		variant = "main",
-		dark_variant = "main",
-		styles = { transparency = true },
-		palette = {
-			main = {
-				_nc = "#1a1a1a",
-				base = "#1e1e1e",
-				surface = "#262626",
-				overlay = "#2f2f2f",
-				highlight_low = "#272727",
-				highlight_med = "#484848",
-				highlight_high = "#5b5b5b",
-			},
+require("rose-pine").setup({
+	variant = "main",
+	dark_variant = "main",
+	styles = { transparency = true },
+	palette = {
+		main = {
+			_nc = "#1a1a1a",
+			base = "#1e1e1e",
+			surface = "#262626",
+			overlay = "#2f2f2f",
+			highlight_low = "#272727",
+			highlight_med = "#484848",
+			highlight_high = "#5b5b5b",
 		},
-	})
-end
+	},
+})
 
-local function setup_gruvbox_material()
-	vim.o.background = "dark"
-	vim.g.gruvbox_material_background = "medium"
-	vim.g.gruvbox_material_transparent_background = 1
-	vim.g.gruvbox_material_better_performance = 1
-end
-
-local function setup_everforest()
-	vim.o.background = "dark"
-	vim.g.everforest_background = "medium"
-	vim.g.everforest_transparent_background = 1
-	vim.g.everforest_better_performance = 1
-end
-
-local SETUP = {
-	["rose-pine"] = setup_rose_pine,
-	["gruvbox-material"] = setup_gruvbox_material,
-	["everforest"] = setup_everforest,
-}
-
-local LUALINE_EXCEPTIONS = {
-	["kanagawa-dragon"] = "kanagawa",
+local CLEAR_BG = {
+	"Normal",
+	"NormalNC",
+	"NormalFloat",
+	"FloatBorder",
+	"FloatTitle",
+	"EndOfBuffer",
+	"SignColumn",
+	"LineNr",
+	"WinBar",
+	"WinBarNC",
 }
 
 -- Returns a theme *table*, not a name: the middle section and the whole
 -- inactive mode (non-selected winbar buffers) get their backgrounds stripped
 -- so the statusline stays transparent like the rest of the UI.
-local function lualine_theme(name)
-	name = LUALINE_EXCEPTIONS[name] or name
+local function lualine_theme()
 	-- Theme modules compute colors from the colorscheme state at require
-	-- time (rose-pine reads its own setup), so a cached table keeps the
-	-- previous palette. Bust the cache and resolve only after activate().
-	local mod = "lualine.themes." .. name
+	-- time, so a cached table keeps the previous palette. Bust the cache.
+	local mod = "lualine.themes." .. (vim.g.colors_name or "auto")
 	package.loaded[mod] = nil
 	local ok, theme = pcall(require, mod)
 	if not ok then
@@ -86,71 +63,22 @@ local function lualine_theme(name)
 	return theme
 end
 
-local COLORSCHEME_CMD = {
-	["rose-pine"] = "rose-pine-main",
-}
-
-local CLEAR_BG = {
-	"Normal",
-	"NormalNC",
-	"NormalFloat",
-	"FloatBorder",
-	"FloatTitle",
-	"EndOfBuffer",
-	"SignColumn",
-	"LineNr",
-	"WinBar",
-	"WinBarNC",
-}
-
-local current = ACTIVE
-
-local function activate(name)
-	local setup = SETUP[name]
-	if setup then
-		setup()
-	end
-	vim.cmd.colorscheme(COLORSCHEME_CMD[name] or name)
-	for _, group in ipairs(CLEAR_BG) do
-		local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
-		hl.bg = nil
-		vim.api.nvim_set_hl(0, group, hl)
-	end
-end
-
-local function apply(name)
-	current = name
-	activate(name)
-	if package.loaded["lualine"] then
-		local lualine = require("lualine")
-		local cfg = vim.tbl_deep_extend("force", lualine.get_config(), {
-			options = { theme = lualine_theme(name) },
-		})
-		lualine.setup(cfg)
-	end
-	vim.notify("colorscheme: " .. name, vim.log.levels.INFO)
-end
-
-vim.keymap.set("n", "<leader>uc", function()
-	local i = 1
-	for idx, name in ipairs(SCHEMES) do
-		if name == current then
-			i = idx
-			break
+vim.api.nvim_create_autocmd("ColorScheme", {
+	callback = function()
+		for _, group in ipairs(CLEAR_BG) do
+			local hl = vim.api.nvim_get_hl(0, { name = group, link = false })
+			hl.bg = nil
+			vim.api.nvim_set_hl(0, group, hl)
 		end
-	end
-	apply(SCHEMES[(i % #SCHEMES) + 1])
-end, { desc = "Cycle colorscheme" })
-
-vim.keymap.set("n", "<leader>uC", function()
-	vim.ui.select(SCHEMES, { prompt = "Colorscheme" }, function(choice)
-		if choice then
-			apply(choice)
+		if package.loaded["lualine"] then
+			local lualine = require("lualine")
+			lualine.setup(vim.tbl_deep_extend("force", lualine.get_config(), {
+				options = { theme = lualine_theme() },
+			}))
 		end
-	end)
-end, { desc = "Pick colorscheme" })
+	end,
+})
 
--- activate() must run first: lualine_theme() reads colors the colorscheme
--- setup produces.
-activate(ACTIVE)
-vim.g.lualine_theme = lualine_theme(ACTIVE)
+vim.cmd.colorscheme("rose-pine-main")
+-- ui.lua hasn't loaded lualine yet at startup; it reads this at setup.
+vim.g.lualine_theme = lualine_theme()

@@ -50,6 +50,14 @@ require("obsidian").setup({
 				local time = date and os.time(date) or os.time()
 				return util.format_date(time, "dddd, MMMM D, YYYY")
 			end,
+			-- Class notes are named "COURSE - YYYY-MM-DD"; this is the COURSE part.
+			class_name = function(ctx)
+				local name = ctx.partial_note and ctx.partial_note:display_name() or ""
+				return (name:gsub("%s*%-%s*%d%d%d%d%-%d%d%-%d%d$", ""))
+			end,
+		},
+		customizations = {
+			["Class Note"] = { notes_subdir = "Class Notes/Fall 2026" },
 		},
 	},
 
@@ -95,6 +103,21 @@ map("n", "<leader>oo", "<cmd>Obsidian quick_switch<cr>", { desc = "Find note" })
 map("n", "<leader>os", "<cmd>Obsidian search<cr>", { desc = "Grep vault" })
 map("n", "<leader>on", "<cmd>Obsidian new<cr>", { desc = "New quick note" })
 map("n", "<leader>oN", "<cmd>Obsidian new_from_template<cr>", { desc = "New note from template" })
+map("n", "<leader>oc", function()
+	vim.ui.input({ prompt = "Class: " }, function(course)
+		if not course or course == "" then
+			return
+		end
+		-- One note per lecture: "COURSE - YYYY-MM-DD" unless a date was given.
+		local title = course
+		if not title:match("%d%d%d%d%-%d%d%-%d%d$") then
+			title = title .. " - " .. os.date("%Y-%m-%d")
+		end
+		require("obsidian.actions").new_from_template(title, "Class Note", function(note)
+			note:open({ sync = true })
+		end)
+	end)
+end, { desc = "New class note" })
 map("n", "<leader>ot", "<cmd>Obsidian today<cr>", { desc = "Today's daily note" })
 map("n", "<leader>oy", "<cmd>Obsidian yesterday<cr>", { desc = "Yesterday's daily note" })
 map("n", "<leader>od", "<cmd>Obsidian dailies<cr>", { desc = "Browse daily notes" })

@@ -49,14 +49,17 @@ map("n", "<leader>fr", fzf.oldfiles, { desc = "Recent files" })
 map("n", "<leader>fg", fzf.git_files, { desc = "Find files (git-tracked)" })
 
 -- Search ----------------------------------------------------------------------
-map("n", "<leader>/", fzf.live_grep, { desc = "Grep project" })
-map("n", "<leader>sg", fzf.live_grep, { desc = "Grep project" })
+map("n", "<leader>/", fzf.live_grep_glob, { desc = "Grep project" })
+map("n", "<leader>sg", fzf.live_grep_glob, { desc = "Grep project" })
 map("n", "<leader>sw", fzf.grep_cword, { desc = "Grep word under cursor" })
 map("x", "<leader>sw", fzf.grep_visual, { desc = "Grep selection" })
-map("n", "<leader>sb", fzf.lgrep_curbuf, { desc = "Grep current buffer" })
+map("n", "<leader>sb", fzf.grep_curbuf, { desc = "Grep current buffer" })
 map("n", "<leader>sh", fzf.helptags, { desc = "Search help" })
 map("n", "<leader>sk", fzf.keymaps, { desc = "Search keymaps" })
 map("n", "<leader>sr", fzf.resume, { desc = "Resume last picker" })
+map("n", "<leader>sz", fzf.zoxide, { desc = "Grep Zoxide" })
+map("n", "<leader>sc", fzf.awesome_colorschemes, { desc = "Grep Colorschemes" })
+map("n", "<leader>so", fzf.nvim_options, { desc = "Grep Nvim Options" })
 
 -- Files -----------------------------------------------------------------------
 map("n", "-", "<cmd>Oil --float<cr>", { desc = "File browser (Oil)" })

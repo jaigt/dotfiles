@@ -31,6 +31,21 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
+-- cd to the project root of whatever buffer I'm in, never deeper
+vim.api.nvim_create_autocmd("BufEnter", {
+	group = augroup("project_root"),
+	callback = function(ev)
+		local name = vim.api.nvim_buf_get_name(ev.buf)
+		if name == "" or name:match("^%w%w+://") or vim.bo[ev.buf].buftype ~= "" then
+			return
+		end
+		local root = vim.fs.root(ev.buf, ".git")
+		if root and root ~= vim.fn.getcwd() then
+			vim.fn.chdir(root)
+		end
+	end,
+})
+
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup("prose"),
 	pattern = { "markdown", "gitcommit", "text" },
