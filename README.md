@@ -4,9 +4,6 @@
   <img src="assets/hero-macos.png" alt="macOS: WezTerm with fastfetch, Claude Code, and Neovim">
 </p>
 
-A few of my configs, copied out of a private dotfiles repo. Nothing here installs
-itself; each directory is just the files for one tool, to read or borrow from.
-
 | | |
 | :--- | :--- |
 | [`nvim/`](nvim/) | Hand-rolled Neovim, no framework, plugins via `vim.pack`. Every keymap has a `desc`. |
@@ -16,5 +13,3 @@ itself; each directory is just the files for one tool, to read or borrow from.
 | [`zsh/`](zsh/) | `.zshrc` and `.zprofile`: fzf-tab, zoxide, syntax highlighting, autosuggestions. |
 | [`claude/`](claude/) | Claude Code: `CLAUDE.md`, the two-line statusline, themes. |
 | [`hyprland/`](hyprland/) | Hyprland config for the Linux box, written in Lua. |
-
-<img src="assets/claude-statusline.png" alt="Claude Code statusline" width="620">
