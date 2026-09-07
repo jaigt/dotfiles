@@ -1,0 +1,279 @@
+-- Terminal palettes. Flip ACTIVE and save -- WezTerm hot-reloads the config.
+--
+-- Do NOT use WezTerm's built-in 'Kanagawa Dragon (Gogh)': it is mislabelled,
+-- carrying Wave's background, foreground and ANSI row. Everything below comes
+-- from rebelot/kanagawa.nvim's own `term` table.
+
+local ACTIVE = "rose-pine" -- 'rose-pine' | 'gruvbox-material' | 'kanagawa-dragon' | 'kanagawa-hybrid' | 'kanagawa-wave'
+
+local palettes = {}
+
+--------------------------------------------------------------------------------
+-- Rosé Pine (main) -- the system theme.
+--------------------------------------------------------------------------------
+-- From rose-pine/alacritty; there's no wezterm port, and WezTerm's built-in
+-- `rose-pine` (Gogh's) swaps the green and blue slots.
+--
+-- Upstream deliberately does NOT align hue names with slot names — Rosé Pine
+-- has no true green or cyan, so the green slot holds a blue-teal, blue holds a
+-- pale cyan, cyan holds a warm pink. `ls` dirs come out teal and diff additions
+-- blue on purpose. Don't "fix" it.
+--
+-- Backgrounds are "graphite": upstream's ramp desaturated at equal lightness.
+palettes["rose-pine"] = {
+	foreground = "#e0def4", -- text
+	background = "#1e1e1e", -- base (graphite)
+
+	cursor_bg = "#5b5b5b", -- highlight-high (graphite)
+	cursor_fg = "#e0def4",
+	cursor_border = "#5b5b5b",
+
+	selection_fg = "#e0def4",
+	selection_bg = "#484848", -- highlight-med (graphite)
+
+	scrollbar_thumb = "#2f2f2f", -- overlay (graphite)
+	split = "#2f2f2f",
+
+	ansi = {
+		"#2f2f2f", -- black   / overlay (graphite)
+		"#eb6f92", -- red     / love
+		"#31748f", -- green   / pine
+		"#f6c177", -- yellow  / gold
+		"#9ccfd8", -- blue    / foam
+		"#c4a7e7", -- magenta / iris
+		"#ebbcba", -- cyan    / rose
+		"#e0def4", -- white   / text
+	},
+	-- Only black brightens: the palette has one tone per hue, so a synthesised
+	-- bright row would invent colours that aren't in the theme.
+	brights = {
+		"#6e6a86", -- muted
+		"#eb6f92",
+		"#31748f",
+		"#f6c177",
+		"#9ccfd8",
+		"#c4a7e7",
+		"#ebbcba",
+		"#e0def4",
+	},
+
+	tab_bar = {
+		background = "#1e1e1e",
+		active_tab = { bg_color = "#1e1e1e", fg_color = "#e0def4" },
+		inactive_tab = { bg_color = "#1e1e1e", fg_color = "#6e6a86" }, -- muted
+		inactive_tab_hover = { bg_color = "#1e1e1e", fg_color = "#908caa" }, -- subtle
+		new_tab = { bg_color = "#1e1e1e", fg_color = "#6e6a86" },
+		new_tab_hover = { bg_color = "#1e1e1e", fg_color = "#e0def4" },
+	},
+}
+
+--------------------------------------------------------------------------------
+-- Gruvbox Material -- dark, medium background, material foreground.
+--------------------------------------------------------------------------------
+-- From sainnhe/gruvbox-material's own palette + its terminal-color mapping.
+-- Upstream puts bg5 in the black slot (deliberately lighter than bg0) and
+-- ships a bright row identical to the normal one.
+--
+-- Local deviation (inverse of rose-pine's graphite): the tan fg/grey ramp is
+-- desaturated at equal luminance -- fg0 #d4be98 -> #c1c1c1, grey1 #928374 ->
+-- #858585, grey2 #a89984 -> #9b9b9b. Hues stay stock.
+palettes["gruvbox-material"] = {
+	foreground = "#c1c1c1", -- fg0
+	background = "#282828", -- bg0
+
+	cursor_bg = "#5a524c", -- bg5
+	cursor_fg = "#c1c1c1",
+	cursor_border = "#5a524c",
+
+	selection_fg = "#c1c1c1",
+	selection_bg = "#45403d", -- bg3 (visual)
+
+	scrollbar_thumb = "#32302f", -- bg1
+	split = "#32302f",
+
+	ansi = {
+		"#5a524c", -- black   / bg5
+		"#ea6962", -- red
+		"#a9b665", -- green
+		"#d8a657", -- yellow
+		"#7daea3", -- blue
+		"#d3869b", -- magenta / purple
+		"#89b482", -- cyan    / aqua
+		"#c1c1c1", -- white   / fg0
+	},
+	brights = {
+		"#5a524c",
+		"#ea6962",
+		"#a9b665",
+		"#d8a657",
+		"#7daea3",
+		"#d3869b",
+		"#89b482",
+		"#c1c1c1",
+	},
+
+	tab_bar = {
+		background = "#282828",
+		active_tab = { bg_color = "#282828", fg_color = "#c1c1c1" },
+		inactive_tab = { bg_color = "#282828", fg_color = "#858585" }, -- grey1
+		inactive_tab_hover = { bg_color = "#282828", fg_color = "#9b9b9b" }, -- grey2
+		new_tab = { bg_color = "#282828", fg_color = "#858585" },
+		new_tab_hover = { bg_color = "#282828", fg_color = "#c1c1c1" },
+	},
+}
+
+--------------------------------------------------------------------------------
+-- Kanagawa Dragon -- the muted, warm-charcoal variant.
+--------------------------------------------------------------------------------
+-- Upstream reuses Wave's colours for Dragon's bright row, so bright-black is
+-- light enough that "dimmed" output reads nearly as bright as body text.
+-- dragonBlack6 (#625e5a) is the fix if that bothers you.
+palettes["kanagawa-dragon"] = {
+	foreground = "#c5c9c5", -- dragonWhite
+	background = "#181616", -- dragonBlack3
+
+	cursor_bg = "#625e5a", -- dragonBlack6
+	cursor_fg = "#181616",
+	cursor_border = "#625e5a",
+
+	selection_fg = "#c5c9c5",
+	selection_bg = "#223249",
+
+	scrollbar_thumb = "#282727", -- bg_p1
+	split = "#282727",
+
+	ansi = {
+		"#0d0c0c", -- black   / dragonBlack0
+		"#c4746e", -- red     / dragonRed
+		"#8a9a7b", -- green   / dragonGreen2
+		"#c4b28a", -- yellow  / dragonYellow
+		"#8ba4b0", -- blue    / dragonBlue2
+		"#a292a3", -- magenta / dragonPink
+		"#8ea4a2", -- cyan    / dragonAqua
+		"#C8C093", -- white
+	},
+	brights = {
+		"#a6a69c", -- dragonGray
+		"#E46876",
+		"#87a987", -- dragonGreen
+		"#E6C384",
+		"#7FB4CA",
+		"#938AA9",
+		"#7AA89F",
+		"#c5c9c5", -- dragonWhite
+	},
+
+	tab_bar = {
+		background = "#181616",
+		active_tab = { bg_color = "#181616", fg_color = "#c5c9c5" },
+		inactive_tab = { bg_color = "#181616", fg_color = "#737c73" }, -- dragonAsh
+		inactive_tab_hover = { bg_color = "#181616", fg_color = "#9e9b93" },
+		new_tab = { bg_color = "#181616", fg_color = "#737c73" },
+		new_tab_hover = { bg_color = "#181616", fg_color = "#c5c9c5" },
+	},
+}
+
+--------------------------------------------------------------------------------
+-- Kanagawa Hybrid -- Dragon's shell, Wave's colours.
+--------------------------------------------------------------------------------
+-- Hand-mixed, not an upstream variant.
+palettes["kanagawa-hybrid"] = {
+	foreground = "#DCD7BA", -- Wave's fujiWhite
+	background = "#181616", -- Dragon's dragonBlack3
+
+	cursor_bg = "#625e5a", -- Dragon's dragonBlack6
+	cursor_fg = "#181616",
+	cursor_border = "#625e5a",
+
+	selection_fg = "#DCD7BA",
+	selection_bg = "#223249",
+
+	scrollbar_thumb = "#282727", -- Dragon's bg_p1
+	split = "#282727",
+
+	ansi = {
+		"#16161D",
+		"#C34043",
+		"#76946A",
+		"#C0A36E",
+		"#7E9CD8",
+		"#957FB8",
+		"#6A9589",
+		"#C8C093",
+	},
+	brights = {
+		"#727169",
+		"#E82424",
+		"#98BB6C",
+		"#E6C384",
+		"#7FB4CA",
+		"#938AA9",
+		"#7AA89F",
+		"#DCD7BA",
+	},
+
+	tab_bar = {
+		background = "#181616",
+		active_tab = { bg_color = "#181616", fg_color = "#DCD7BA" },
+		inactive_tab = { bg_color = "#181616", fg_color = "#737c73" },
+		inactive_tab_hover = { bg_color = "#181616", fg_color = "#C8C093" },
+		new_tab = { bg_color = "#181616", fg_color = "#737c73" },
+		new_tab_hover = { bg_color = "#181616", fg_color = "#DCD7BA" },
+	},
+}
+
+--------------------------------------------------------------------------------
+-- Kanagawa Wave -- the original, saturated variant. Here for comparison.
+--------------------------------------------------------------------------------
+palettes["kanagawa-wave"] = {
+	foreground = "#DCD7BA", -- fujiWhite
+	background = "#1F1F28", -- sumiInk3
+
+	cursor_bg = "#54546D",
+	cursor_fg = "#1F1F28",
+	cursor_border = "#54546D",
+
+	selection_fg = "#DCD7BA",
+	selection_bg = "#223249",
+
+	scrollbar_thumb = "#2A2A37",
+	split = "#2A2A37",
+
+	ansi = {
+		"#16161D",
+		"#C34043",
+		"#76946A",
+		"#C0A36E",
+		"#7E9CD8",
+		"#957FB8",
+		"#6A9589",
+		"#C8C093",
+	},
+	brights = {
+		"#727169",
+		"#E82424",
+		"#98BB6C",
+		"#E6C384",
+		"#7FB4CA",
+		"#938AA9",
+		"#7AA89F",
+		"#DCD7BA",
+	},
+
+	tab_bar = {
+		background = "#1F1F28",
+		active_tab = { bg_color = "#1F1F28", fg_color = "#DCD7BA" },
+		inactive_tab = { bg_color = "#1F1F28", fg_color = "#727169" },
+		inactive_tab_hover = { bg_color = "#1F1F28", fg_color = "#C8C093" },
+		new_tab = { bg_color = "#1F1F28", fg_color = "#727169" },
+		new_tab_hover = { bg_color = "#1F1F28", fg_color = "#DCD7BA" },
+	},
+}
+
+-- A plain table so other modules can reach individual swatches.
+local M = palettes[ACTIVE]
+if not M then
+	error("colors.lua: unknown ACTIVE palette '" .. tostring(ACTIVE) .. "'")
+end
+
+return M

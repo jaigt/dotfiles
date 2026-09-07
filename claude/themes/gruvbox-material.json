@@ -1,0 +1,28 @@
+{
+  "name": "Gruvbox Material",
+  "base": "dark",
+  "overrides": {
+    "claude": "#e78a4e",
+    "text": "#c1c1c1",
+    "inactive": "#858585",
+    "subtle": "#9b9b9b",
+    "suggestion": "#858585",
+    "success": "#89b482",
+    "error": "#ea6962",
+    "warning": "#d8a657",
+    "merged": "#d3869b",
+    "permission": "#d3869b",
+    "promptBorder": "#737373",
+    "planMode": "#7daea3",
+    "autoAccept": "#d8a657",
+    "bashBorder": "#ea6962",
+    "ide": "#89b482",
+    "diffAdded": "#34381b",
+    "diffRemoved": "#402120",
+    "diffAddedDimmed": "#2e3021",
+    "diffRemovedDimmed": "#342424",
+    "diffAddedWord": "#4a5428",
+    "diffRemovedWord": "#5c2f2e",
+    "claudeShimmer": "#d8a657"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Rosé Pine",
+  "base": "dark",
+  "overrides": {
+    "claude": "#ebbcba",
+    "text": "#e0def4",
+    "inactive": "#908caa",
+    "subtle": "#a9a5c4",
+    "suggestion": "#908caa",
+    "success": "#9ccfd8",
+    "error": "#eb6f92",
+    "warning": "#f6c177",
+    "merged": "#c4a7e7",
+    "permission": "#c4a7e7",
+    "promptBorder": "#6e6a86",
+    "planMode": "#31748f",
+    "autoAccept": "#f6c177",
+    "bashBorder": "#eb6f92",
+    "ide": "#9ccfd8",
+    "diffAdded": "#20393d",
+    "diffRemoved": "#3b2531",
+    "diffAddedDimmed": "#1a2c30",
+    "diffRemovedDimmed": "#2b1c25",
+    "diffAddedWord": "#2d545c",
+    "diffRemovedWord": "#57344b",
+    "claudeShimmer": "#f6c177"
+  }
+}
