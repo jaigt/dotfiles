@@ -1,8 +1,3 @@
-require("mini.icons").setup()
--- Lets mini.icons answer to nvim-web-devicons, which some plugins still ask
--- for by name — saves installing a second icon plugin.
-MiniIcons.mock_nvim_web_devicons()
-
 -- Breadcrumbs: "Class > method > block" for the cursor, off the treesitter tree.
 local BREADCRUMB_NODES = {
 	class_declaration = true,

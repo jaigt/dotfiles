@@ -46,21 +46,7 @@ vim.api.nvim_create_user_command("FormatEnable", function()
 	vim.g.disable_autoformat = false
 end, { desc = "Turn format-on-save back on" })
 
-require("mini.pairs").setup()
-
 -- Remapped off the default `s` prefix, which shadows native `s` and `S`.
-require("mini.surround").setup({
-	mappings = {
-		add = "gsa",
-		delete = "gsd",
-		replace = "gsr",
-		find = "gsf",
-		find_left = "gsF",
-		highlight = "gsh",
-		update_n_lines = "gsn",
-	},
-})
-
 require("nvim-ts-autotag").setup()
 
 -- Native `gc` picks comment syntax per filetype, so it emits `//` inside JSX,

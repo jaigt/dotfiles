@@ -1,3 +1,28 @@
+-- UI
+require("mini.icons").setup()
+MiniIcons.mock_nvim_web_devicons()
+
+require("mini.sessions").setup({
+	autoread = false,
+	autowrite = true,
+})
+
+-- Editing/Coding:
+require("mini.ai").setup()
+require("mini.pairs").setup()
+require("mini.surround").setup({
+	mappings = {
+		add = "gsa",
+		delete = "gsd",
+		replace = "gsr",
+		find = "gsf",
+		find_left = "gsF",
+		highlight = "gsh",
+		update_n_lines = "gsn",
+	},
+})
+
+-- Dashboard:
 local starter = require("mini.starter")
 
 local HEADER = [[

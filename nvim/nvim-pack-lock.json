@@ -61,25 +61,9 @@
       "rev": "2a6940af80375532e5e9e7c1f2fc6319a1b7a69d",
       "src": "https://github.com/mason-org/mason.nvim"
     },
-    "mini.icons": {
-      "rev": "98faae31e9be1cc054ae63485e58ceb185efcad0",
-      "src": "https://github.com/nvim-mini/mini.icons"
-    },
-    "mini.pairs": {
-      "rev": "b1c5a726921b7a8c9321e9a7a208aa0571de5810",
-      "src": "https://github.com/nvim-mini/mini.pairs"
-    },
-    "mini.sessions": {
-      "rev": "87d068a84abf6d687f7c68de2b496a9bd88bc533",
-      "src": "https://github.com/nvim-mini/mini.sessions"
-    },
-    "mini.starter": {
-      "rev": "25de4998197d59673f1918968a8f4060195edca0",
-      "src": "https://github.com/nvim-mini/mini.starter"
-    },
-    "mini.surround": {
-      "rev": "8d5d0c5aa92449368ac251e85451d79d8f69d296",
-      "src": "https://github.com/nvim-mini/mini.surround"
+    "mini.nvim": {
+      "rev": "25f25d3e6661d942323e56711096de1850d814ec",
+      "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "neo-tree.nvim": {
       "rev": "83e7a2982fd12b9c3d35bc39dd5877cd91a02a61",
@@ -109,7 +93,7 @@
     },
     "obsidian.nvim": {
       "rev": "07f94ef04a417555ee56a5895ddeb740f2de0033",
-      "src": "https://github.com/obsidian-nvim/obsidian.nvim"
+      "src": "https://github.com/epwalsh/obsidian.nvim"
     },
     "oil.nvim": {
       "rev": "b73018b75affd13fa38e2fc94ef753b465f770d7",

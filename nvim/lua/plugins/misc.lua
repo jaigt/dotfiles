@@ -24,8 +24,3 @@ require("which-key").add({
 	{ "]", group = "next" },
 	{ "[", group = "previous" },
 })
-
-require("mini.sessions").setup({
-	autoread = false,
-	autowrite = true,
-})
