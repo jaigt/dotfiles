@@ -9,6 +9,7 @@ require("mini.sessions").setup({
 
 -- Editing/Coding:
 require("mini.ai").setup()
+require("mini.bracketed").setup()
 require("mini.pairs").setup()
 require("mini.surround").setup({
 	mappings = {
