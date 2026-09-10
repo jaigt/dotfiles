@@ -7,7 +7,6 @@ vim.pack.add({
 	{ src = gh("rose-pine/neovim"), name = "rose-pine" },
 	gh("sainnhe/gruvbox-material"),
 	gh("rebelot/kanagawa.nvim"),
-	gh("RRethy/base16-nvim"),
 
 	-- mini.lua
 	gh("nvim-mini/mini.nvim"),
