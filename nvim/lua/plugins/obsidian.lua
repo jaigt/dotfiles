@@ -99,6 +99,40 @@ vim.lsp.config("marksman", {
 	end,
 })
 
+-- iCloud bumps a brand-new file's mtime ~0.5s after creation. nvim reads the
+-- note before that and then refuses every later :w ("changed since reading").
+-- Re-read the buffer once the bump lands, while it's still unmodified.
+vim.api.nvim_create_autocmd("BufReadPost", {
+	group = vim.api.nvim_create_augroup("vault_icloud_touch", { clear = true }),
+	callback = function(ev)
+		local path = vim.api.nvim_buf_get_name(ev.buf)
+		if not vim.startswith(path, vault) then
+			return
+		end
+		local function mtime()
+			local st = vim.uv.fs_stat(path)
+			return st and (st.mtime.sec .. "." .. st.mtime.nsec)
+		end
+		local seen, tries = mtime(), 0
+		local timer = vim.uv.new_timer()
+		timer:start(
+			250,
+			250,
+			vim.schedule_wrap(function()
+				tries = tries + 1
+				local now = mtime()
+				if now ~= seen and vim.api.nvim_buf_is_valid(ev.buf) and not vim.bo[ev.buf].modified then
+					vim.cmd("silent! checktime " .. ev.buf)
+				end
+				if now ~= seen or tries >= 12 then
+					timer:stop()
+					timer:close()
+				end
+			end)
+		)
+	end,
+})
+
 -- In-buffer maps come with the plugin: <CR> smart action (follow link /
 -- toggle checkbox), ]o and [o between links.
 local map = vim.keymap.set

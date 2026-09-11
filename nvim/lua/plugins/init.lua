@@ -47,7 +47,7 @@ vim.pack.add({
 	gh("esmuellert/codediff.nvim"),
 
 	-- obsidian.lua
-	gh("epwalsh/obsidian.nvim"),
+	gh("obsidian-nvim/obsidian.nvim"),
 	gh("MeanderingProgrammer/render-markdown.nvim"),
 
 	-- misc.lua
