@@ -16,7 +16,6 @@ require("which-key").add({
 	{ "<leader>c", group = "code" },
 	{ "<leader>u", group = "toggle/ui" },
 	{ "<leader>p", group = "plugins" },
-	{ "<leader>o", group = "obsidian" }, -- maps live in plugins/obsidian.lua
 
 	-- non-leader prefixes
 	{ "g", group = "goto" },

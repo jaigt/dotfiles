@@ -46,8 +46,7 @@ vim.pack.add({
 	gh("lewis6991/gitsigns.nvim"),
 	gh("esmuellert/codediff.nvim"),
 
-	-- obsidian.lua
-	gh("obsidian-nvim/obsidian.nvim"),
+	-- markdown.lua
 	gh("MeanderingProgrammer/render-markdown.nvim"),
 
 	-- misc.lua
@@ -63,5 +62,5 @@ require("plugins.cmp")
 require("plugins.code")
 require("plugins.files")
 require("plugins.git")
-require("plugins.obsidian")
+require("plugins.markdown")
 require("plugins.misc")
